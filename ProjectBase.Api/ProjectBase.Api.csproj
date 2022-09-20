@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\ProjectBase.Data\ProjectBase.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectBase.Data\ProjectBase.Data.csproj" />
+    <Folder Include="Infrastructure\ResponseModels\" />
   </ItemGroup>
 
 </Project>
