@@ -12,7 +12,7 @@ namespace ProjectBase.Data.Database
         public DapperContext(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("SolvyDb");
+            _connectionString = _configuration.GetConnectionString("BaseDb");
         }
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
     }

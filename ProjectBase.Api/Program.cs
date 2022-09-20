@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Identity
 
 //adding identity context
-builder.Services.AddDbContext<BaseIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BaseProjectDb")));
+builder.Services.AddDbContext<BaseIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BaseDb")));
 
 //adding indentity
 builder.Services
