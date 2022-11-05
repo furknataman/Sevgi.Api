@@ -91,6 +91,7 @@ namespace ProjectBase.Model.Utilities
         public const string USER_NOT_FOUND = "USER_NOT_FOUND";
         public const string USER_SUSPENDED = "USER_SUSPENDED";
         public const string INVALID_PASSWORD = "INVALID_PASSWORD";
+        public const string INVALID_TOKEN = "INVALID_TOKEN";
 
         public const string USER_EXISTS = "USER_EXISTS";
         public const string MISSING_TOKEN = "MISSING_TOKEN";
@@ -116,6 +117,7 @@ namespace ProjectBase.Model.Utilities
         public InvalidPasswordException(string msg = "Hatalı parola.") : base(INVALID_PASSWORD, msg) { }
     }
 
+
     public class MembershipSuspendedException : UserException
     {
         public MembershipSuspendedException(string msg = "Üyeliğiniz askıya alınmış.") : base(USER_SUSPENDED, msg) { }
@@ -134,5 +136,10 @@ namespace ProjectBase.Model.Utilities
     public class SessionExpiredException : UserException
     {
         public SessionExpiredException(string msg = "Oturumunuz zaman aşımına uğradı") : base(SESSION_EXPIRED, msg) { }
+    }
+
+    public class InvalidTokenException : UserException
+    {
+        public InvalidTokenException(string msg = "Hatalı parola.") : base(INVALID_PASSWORD, msg) { }
     }
 }

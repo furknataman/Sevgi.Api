@@ -63,7 +63,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddSingleton<DapperContext>();
 
 //adding authservice
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 //adding repository services
 ////adding test repo
