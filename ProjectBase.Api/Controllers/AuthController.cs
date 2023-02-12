@@ -17,12 +17,8 @@ namespace ProjectBase.Api.Controllers
             _authService = authService;
         }
 
-
         [AllowAnonymous]
         [HttpPost("sign-in")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
         {
             var response = await _authService.SignIn(request.Email, request.Password);
@@ -32,9 +28,6 @@ namespace ProjectBase.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("sign-up")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignUp([FromBody] RegisterRequest request)
         {
             var response = await _authService.SignUp(request.Email, request.Password);
@@ -44,9 +37,6 @@ namespace ProjectBase.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("external")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExternalAuth([FromBody] AuthRequest request)
         {
             var result = await _authService.ExternalAuth(request);
@@ -55,9 +45,6 @@ namespace ProjectBase.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("clear-users")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ClearUsers()
         {
             await _authService.ClearUsers();
