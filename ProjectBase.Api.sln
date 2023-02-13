@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBase.Api", "ProjectBase.Api\ProjectBase.Api.csproj", "{E0737420-D2A9-4360-B05A-2CCD9805041C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectBase.Api", "ProjectBase.Api\ProjectBase.Api.csproj", "{E0737420-D2A9-4360-B05A-2CCD9805041C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBase.Data", "ProjectBase.Data\ProjectBase.Data.csproj", "{423237D1-8C00-422A-9EFB-FAB566A18D35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectBase.Data", "ProjectBase.Data\ProjectBase.Data.csproj", "{423237D1-8C00-422A-9EFB-FAB566A18D35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBase.Model", "ProjectBase.Model\ProjectBase.Model.csproj", "{81157E6B-AE25-472F-B7C9-C6A099592953}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectBase.Model", "ProjectBase.Model\ProjectBase.Model.csproj", "{81157E6B-AE25-472F-B7C9-C6A099592953}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
