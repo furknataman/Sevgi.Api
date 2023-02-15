@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjectBase.Data.Services;
+using Sevgi.Data.Services;
 
-namespace Solvy.Api.Controllers
+namespace Sevgi.Api.Controllers
 {
     [ApiController]
     [Authorize]

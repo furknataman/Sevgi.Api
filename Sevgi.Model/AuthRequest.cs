@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProjectBase.Model
+namespace Sevgi.Model
 {
     public class AuthRequest
     {

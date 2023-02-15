@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectBase.Model.Utilities
+namespace Sevgi.Model.Utilities
 {
     public abstract class BaseException : Exception
     {

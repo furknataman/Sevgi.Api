@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ProjectBase.Data.Utilities
+namespace Sevgi.Data.Utilities
 {
     public static class Extensions
     {

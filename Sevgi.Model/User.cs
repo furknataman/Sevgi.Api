@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectBase.Model
+namespace Sevgi.Model
 {
     public class User : IdentityUser
     {

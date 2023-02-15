@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProjectBase.Api.Infrastructure.RequestModels
+namespace Sevgi.Api.Infrastructure.RequestModels
 {
     public record LoginRequest
     {

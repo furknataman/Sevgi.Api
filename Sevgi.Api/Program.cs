@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ProjectBase.Data.Database;
-using ProjectBase.Data.Services;
-using ProjectBase.Model;
+using Sevgi.Data.Database;
+using Sevgi.Data.Services;
+using Sevgi.Model;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Identity
 
 //adding identity context
-builder.Services.AddDbContext<BaseIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BaseDb")));
+builder.Services.AddDbContext<BaseIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //adding indentity
 builder.Services

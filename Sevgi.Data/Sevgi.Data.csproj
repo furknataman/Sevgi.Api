@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectBase.Model\ProjectBase.Model.csproj" />
+    <ProjectReference Include="..\Sevgi.Model\Sevgi.Model.csproj" />
   </ItemGroup>
 
 </Project>

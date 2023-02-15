@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjectBase.Api.Infrastructure.RequestModels;
-using ProjectBase.Data.Services;
-using ProjectBase.Model;
+using Sevgi.Api.Infrastructure.RequestModels;
+using Sevgi.Data.Services;
+using Sevgi.Model;
 
-namespace ProjectBase.Api.Controllers
+namespace Sevgi.Api.Controllers
 {
     [ApiController]
     [Route("auth")]

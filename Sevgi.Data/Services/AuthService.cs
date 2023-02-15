@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ProjectBase.Data.Utilities;
-using ProjectBase.Model;
-using ProjectBase.Model.Utilities;
+using Sevgi.Data.Utilities;
+using Sevgi.Model;
+using Sevgi.Model.Utilities;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectBase.Data.Services
+namespace Sevgi.Data.Services
 {
     public interface IAuthService
     {

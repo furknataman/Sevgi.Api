@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using ProjectBase.Data.Database;
+using Sevgi.Data.Database;
 
-namespace ProjectBase.Data.Services
+namespace Sevgi.Data.Services
 {
     public interface IBaseService
     {

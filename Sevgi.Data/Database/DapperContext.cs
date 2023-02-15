@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
-namespace ProjectBase.Data.Database
+namespace Sevgi.Data.Database
 {
     public class DapperContext
     {
@@ -12,7 +12,7 @@ namespace ProjectBase.Data.Database
         public DapperContext(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("BaseDb");
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
     }

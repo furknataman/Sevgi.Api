@@ -26,7 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectBase.Data\ProjectBase.Data.csproj" />
+    <ProjectReference Include="..\Sevgi.Data\Sevgi.Data.csproj" />
+    <ProjectReference Include="..\Sevgi.Model\Sevgi.Model.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
