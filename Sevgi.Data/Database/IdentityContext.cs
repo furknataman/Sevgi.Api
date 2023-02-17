@@ -5,9 +5,9 @@ using Sevgi.Model;
 
 namespace Sevgi.Data.Database
 {
-    public class BaseIdentityContext : IdentityDbContext<User>
+    public class SevgiIdentityContext : IdentityDbContext<User>
     {
-        public BaseIdentityContext(DbContextOptions<BaseIdentityContext> options) : base(options)
+        public SevgiIdentityContext(DbContextOptions<SevgiIdentityContext> options) : base(options)
         {
             //this is the dbcontext which creates and connects to your database for identity operations.
             //use options if you will have startup settings
@@ -17,8 +17,8 @@ namespace Sevgi.Data.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            var schemaName = "Identity";
-            modelBuilder.HasDefaultSchema(schemaName);
+            //var schemaName = "Identity";
+            //modelBuilder.HasDefaultSchema(schemaName);
 
             modelBuilder.Entity<User>(entity => { entity.ToTable(name: "Users"); });
             modelBuilder.Entity<IdentityRole>(entity => { entity.ToTable(name: "Roles"); });

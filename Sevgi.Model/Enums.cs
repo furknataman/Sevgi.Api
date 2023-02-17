@@ -11,6 +11,15 @@ namespace Sevgi.Model
     {
         INTERNAL = 0,
         GOOGLE = 1,
-        APPLE = 2
+        APPLE = 2,
+        FIREBASE = 3
+    }
+
+    public enum VerificationMethods
+    {
+        NONE = 0,
+        EMAIL = 1,
+        PHONE = 2,
+        USERNAME = 3
     }
 }

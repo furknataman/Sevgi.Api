@@ -16,12 +16,19 @@ var builder = WebApplication.CreateBuilder(args);
 #region Identity
 
 //adding identity context
-builder.Services.AddDbContext<BaseIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<BaseIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var serverVersion = new MySqlServerVersion(new Version(5, 7, 33));
+builder.Services.AddDbContext<SevgiIdentityContext>(
+    options => options
+    .UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), serverVersion)
+    .EnableDetailedErrors()
+);
 
 //adding indentity
 builder.Services
     .AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<BaseIdentityContext>()
+    .AddEntityFrameworkStores<SevgiIdentityContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>

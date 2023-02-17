@@ -1,4 +1,5 @@
-﻿using Google.Apis.Auth;
+﻿using FirebaseAdmin.Auth;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -114,7 +115,16 @@ namespace Sevgi.Data.Services
                     //add login
                     await _userManager.AddLoginAsync(await _userManager.FindByEmailAsync(payload.Email), loginInfo);
                     return result;
-
+                case AuthProviders.FIREBASE:
+                    //verify firebase token
+                    var firebaseClient = FirebaseAdmin.FirebaseApp.Create();
+                    var token = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(request.IdToken);
+                    if (token is null) throw new InvalidTokenException();
+                    
+                    //check if registered
+                    //register if not
+                    //login
+                    return "";
                 case AuthProviders.INTERNAL:
                 case AuthProviders.APPLE:
                 default:
