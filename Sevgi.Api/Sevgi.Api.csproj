@@ -33,4 +33,10 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Infrastructure\FirebaseToken\firebaseAdminToken.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

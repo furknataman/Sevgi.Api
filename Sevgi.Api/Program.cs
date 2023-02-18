@@ -1,3 +1,6 @@
+using FirebaseAdmin.Auth;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+#region Firebase
+//create firebase instance if there is not
+if (FirebaseAuth.DefaultInstance is null) FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile(@"Infrastructure\FirebaseToken\firebaseAdminToken.json")
+}); 
+#endregion
 
 #region Identity
 

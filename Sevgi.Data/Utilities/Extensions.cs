@@ -14,6 +14,18 @@ namespace Sevgi.Data.Utilities
             return seed.GeneratePassword() == password;
         }
 
+        public static string GenerateEmailForFirebase(this string seed)
+        {
+            return "fuser_" + seed.ToLower() + "@firebase.com";
+        }
+        public static string GenerateUsernameForFirebase(this string seed, string second)
+        {
+            return "fuser_" + seed + "_" + second + "_" + (seed + second).Length;
+        }
+
+
+
+
     }
 
     public static class JsonExtensions
