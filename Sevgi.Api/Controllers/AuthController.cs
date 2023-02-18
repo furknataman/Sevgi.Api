@@ -35,14 +35,6 @@ namespace Sevgi.Api.Controllers
             return Ok(response);
         }
 
-        //[AllowAnonymous]
-        //[HttpPost("external")]
-        //public async Task<IActionResult> ExternalAuth([FromBody] AuthRequest request)
-        //{
-        //    var result = await _authService.ExternalAuth(request);
-        //    return Ok(result);
-        //}
-
         [AllowAnonymous]
         [HttpPost("external")]
         public async Task<IActionResult> ExternalAuth([FromBody] AuthRequest request)

@@ -101,7 +101,6 @@ namespace Sevgi.Data.Services
             return string.Join(", ", errors.Select(error => error.Description).ToArray());
         }
 
-
         public async Task<string> ExternalAuth(AuthRequest request)
         {
             switch (request.Provider)

@@ -9,6 +9,6 @@ namespace Sevgi.Model
 
         [Required]
         public string IdToken { get; set; } = string.Empty;
-        public VerificationMethods VerificationMethod { get; set; } = VerificationMethods.PHONE;
+        //public VerificationMethods VerificationMethod { get; set; } = VerificationMethods.PHONE;
     }
 }
