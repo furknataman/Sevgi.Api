@@ -85,6 +85,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 //adding repository services
 ////adding test repo
 builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -142,6 +143,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//app.UseCors("AllowAngularDevClient");
 
 app.UseHttpsRedirection();
 

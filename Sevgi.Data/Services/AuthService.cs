@@ -24,6 +24,7 @@ namespace Sevgi.Data.Services
         Task<string> ExternalAuth(AuthRequest request);
         Task<string> SignOut(string email);
         Task ClearUsers();
+        Task AddUserInfo(ProfileInformation request);
 
     }
 
@@ -171,6 +172,11 @@ namespace Sevgi.Data.Services
         }
 
         public Task ClearUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddUserInfo(ProfileInformation request)
         {
             throw new NotImplementedException();
         }

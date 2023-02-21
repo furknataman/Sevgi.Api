@@ -22,4 +22,8 @@ namespace Sevgi.Model
         PHONE = 2,
         USERNAME = 3
     }
+    public enum Genders { 
+        MALE,
+        FEMALE
+    }
 }
