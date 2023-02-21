@@ -21,7 +21,7 @@ namespace Sevgi.Data.Services
     {
         Task<string> SignUp(string email, string password);
         Task<string> SignIn(string email, string password);
-        Task<string> ExternalAuth(AuthRequest request);
+        Task<AuthResponse> ExternalAuth(AuthRequest request);
         Task<string> SignOut(string email);
         Task ClearUsers();
         Task AddUserInfo(ProfileInformation request);
@@ -102,8 +102,9 @@ namespace Sevgi.Data.Services
             return string.Join(", ", errors.Select(error => error.Description).ToArray());
         }
 
-        public async Task<string> ExternalAuth(AuthRequest request)
+        public async Task<AuthResponse> ExternalAuth(AuthRequest request)
         {
+            var response = new AuthResponse();
             switch (request.Provider)
             {
                 case AuthProviders.GOOGLE:
@@ -114,17 +115,17 @@ namespace Sevgi.Data.Services
                     //check if registered
                     var googleLoginInfo = new UserLoginInfo(request.Provider.ToString(), payload.Subject, "Google");
                     var userFromGoogle = await _userManager.FindByEmailAsync(payload.Email);
+                    response.IsRegistered = userFromGoogle != null;
 
                     //register if not
-                    string result;
-                    if (userFromGoogle == null) result = await SignUp(payload.Email, payload.Email.GeneratePassword());
-                    else result = await SignIn(payload.Email, payload.Email.GeneratePassword());
+                    if (!response.IsRegistered) response.Token = await SignUp(payload.Email, payload.Email.GeneratePassword());
+                    else response.Token = await SignIn(payload.Email, payload.Email.GeneratePassword());
 
                     userFromGoogle = userFromGoogle is null ? await _userManager.FindByEmailAsync(payload.Email) : userFromGoogle;
 
                     //add login
                     await _userManager.AddLoginAsync(userFromGoogle!, googleLoginInfo);
-                    return result;
+                    return response;
 
                 case AuthProviders.FIREBASE:
 
@@ -138,8 +139,6 @@ namespace Sevgi.Data.Services
                     //check if registered
                     var firebaseLoginInfo = new UserLoginInfo(request.Provider.ToString(), firebaseUser.Uid, "Firebase");
                     var userFromFirebase = await _userManager.FindByLoginAsync(firebaseLoginInfo.LoginProvider, firebaseLoginInfo.ProviderKey);
-
-                    //register if not
                     var userToRegister = new User()
                     {
                         UserName = firebaseUser.Uid.GenerateUsernameForFirebase(firebaseUser.PhoneNumber),
@@ -147,17 +146,17 @@ namespace Sevgi.Data.Services
                         PhoneNumber = firebaseUser.PhoneNumber,
                         SecurityStamp = Guid.NewGuid().ToString()
                     };
+                    response.IsRegistered = userFromFirebase != null;
 
                     //register if not
-                    string firebaseResult;
-                    if (userFromFirebase == null) firebaseResult = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
-                    else firebaseResult = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
+                    if (userFromFirebase == null) response.Token = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
+                    else response.Token = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
 
                     userFromFirebase = userFromFirebase is null ? await _userManager.FindByEmailAsync(userToRegister.Email) : userFromFirebase;
 
                     //add login
                     await _userManager.AddLoginAsync(userFromFirebase!, firebaseLoginInfo);
-                    return firebaseResult;
+                    return response;
 
                 case AuthProviders.INTERNAL:
                 case AuthProviders.APPLE:
