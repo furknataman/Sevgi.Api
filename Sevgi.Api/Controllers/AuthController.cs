@@ -20,6 +20,24 @@ namespace Sevgi.Api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("sign-in")]
+        public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
+        {
+            var response = await _authService.SignIn(request.Email, request.Password);
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("sign-up")]
+        public async Task<IActionResult> SignUp([FromBody] RegisterRequest request)
+        {
+            var response = await _authService.SignUp(request.Email, request.Password);
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
         [HttpPost("external")]
         public async Task<IActionResult> ExternalAuth([FromBody] AuthRequest request)
         {
