@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 //create firebase instance if there is not
 if (FirebaseAuth.DefaultInstance is null) FirebaseApp.Create(new AppOptions()
 {
-    Credential = GoogleCredential.FromFile(@"Infrastructure\FirebaseToken\firebaseAdminToken.json")
+    Credential = GoogleCredential.FromFile(@"Infrastructure/FirebaseToken/firebaseAdminToken.json")
 }); 
 #endregion
 

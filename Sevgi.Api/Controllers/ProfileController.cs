@@ -9,7 +9,7 @@ namespace Sevgi.Api.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("test")]
+    [Route("profile")]
     public class ProfileController : ControllerBase
     {
         //This is the basic controller protected by authorization.
@@ -41,6 +41,19 @@ namespace Sevgi.Api.Controllers
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null) return null;
             return user;
+        }
+
+
+
+        [HttpGet("info")]
+        public async Task<IActionResult> InfoProfile()
+        {
+            //get the authenticated user
+            var user = await GetCurrentUserAsync();
+            if (user is null) return BadRequest();
+
+            var result=await _profileService.GetInfo();
+            return Ok(result);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Sevgi.Data.Services
     public interface IProfileService
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
+        public Task<String> GetInfo();
     }
     public class ProfileService : IProfileService
     {
@@ -28,6 +29,10 @@ namespace Sevgi.Data.Services
             userToUpdate.BirthDate = newInfo.BirthDate;
 
             await _userManager.UpdateAsync(userToUpdate);
+        }
+        public async Task<String> GetInfo()
+        {
+            return "SomeThing";
         }
     }
 }
