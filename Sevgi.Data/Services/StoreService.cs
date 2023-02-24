@@ -1,30 +1,31 @@
 ﻿using Dapper;
 using Sevgi.Data.Database;
-
+using Sevgi.Model;
 namespace Sevgi.Data.Services
 {
-    public interface IBaseService
+    public interface IStoreService
     {
-        public Task<IEnumerable<int>> GetNumber();
+        public Task<IEnumerable<Store>> GetAll();
     }
-    public class BaseService : IBaseService
+    public class StoreService : IStoreService
     {
         private DapperContext _context;
-        public BaseService(DapperContext context)
+        public StoreService(DapperContext context)
         {
             //get db here
             _context = context;
         }
 
-        public async Task<IEnumerable<int>> GetNumber()
+        public async Task<IEnumerable<Store>> GetAll()
         {
+            string userId = "1' OR 1=1 GO DROP TABLE Users";
             var query = @"
-                SELECT 1
-            ";
+                SELECT * from Stores
+                where id = '"+userId+"'";
 
             using var connection = _context.CreateConnection();
-            var tests = await connection.QueryAsync<int>(query);
-            return tests;
+            var allStores = await connection.QueryAsync<Store>(query);
+            return allStores;
         }
     }
 }

@@ -1,29 +1,30 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sevgi.Data.Services;
+using Sevgi.Model;
 
 namespace Sevgi.Api.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("test")]
-    public class BaseController : ControllerBase
+    [Route("store")]
+    public class StoreController : ControllerBase
     {
         //This is the basic controller protected by authorization.
         //This controller uses base service injection which also uses dapper context to connect to database.
-        private readonly ILogger<BaseController> _logger;
-        private readonly IBaseService _baseService;
 
-        public BaseController(ILogger<BaseController> logger, IBaseService baseService)
+        private readonly IStoreService _storeService;
+
+        public StoreController(IStoreService storeService)
         {
-            _logger = logger;
-            _baseService = baseService;
+
+            _storeService = storeService;
         }
-
+        [AllowAnonymous]
         [HttpGet("get-all")]
-        public async Task<IEnumerable<int>> GetTests()
+        public async Task<IEnumerable<Store>> GetTests()
         {
-            var tests = await _baseService.GetNumber();
+            var tests = await _storeService.GetAll();
             return tests;
         }
     }
