@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sevgi.Api.Infrastructure.RequestModels;
 using Sevgi.Data.Services;
 using Sevgi.Model;
 
@@ -22,9 +23,28 @@ namespace Sevgi.Api.Controllers
         }
         [AllowAnonymous]
         [HttpGet("get-all")]
-        public async Task<IEnumerable<Store>> GetTests()
+        public async Task<IEnumerable<Store>> GetAllStore()
         {
             var tests = await _storeService.GetAll();
+            return tests;
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateStore([FromBody] Store store)
+        {
+            var tests = await _storeService.Update(store);
+            return Ok(tests);
+
+        }
+        
+      
+        [AllowAnonymous]
+        [HttpPost("add")]
+        public async Task<IEnumerable<Store>>AddStore (Store store)
+        {
+            var tests = await _storeService.Add(store);
             return tests;
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sevgi.Data.Database;
 
@@ -10,9 +11,11 @@ using Sevgi.Data.Database;
 namespace Sevgi.Data.Migrations
 {
     [DbContext(typeof(SevgiIdentityContext))]
-    partial class SevgiIdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230228152934_AddedCreatedAtColumn")]
+    partial class AddedCreatedAtColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

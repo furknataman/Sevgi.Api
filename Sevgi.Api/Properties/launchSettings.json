@@ -20,6 +20,7 @@
     "Sevgi.Api": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "swagger",
       "applicationUrl": "http://localhost:47517",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

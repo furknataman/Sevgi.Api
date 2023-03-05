@@ -15,5 +15,6 @@ namespace Sevgi.Model
         public string LastName { get; set; } = string.Empty;
         public Genders Gender { get; set; }
         public DateTime BirthDate { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

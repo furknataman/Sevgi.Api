@@ -49,7 +49,8 @@ namespace Sevgi.Data.Services
             {
                 UserName = email,
                 Email = email,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                CreatedAt = DateTime.Now
             };
 
             var result = await _userManager.CreateAsync(userToRegister, password);
@@ -60,6 +61,8 @@ namespace Sevgi.Data.Services
         }
         public async Task<string> SignUp(User user, string password)
         {
+            user.CreatedAt = DateTime.Now;
+
             var result = await _userManager.CreateAsync(user, password);
 
             if (!result.Succeeded) throw new UserException($"User with phone: {user.PhoneNumber} cannot be registered. Errors: {GetErrorsText(result.Errors)}");

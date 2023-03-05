@@ -86,6 +86,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 ////adding test repo
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddControllers();
