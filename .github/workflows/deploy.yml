@@ -5,8 +5,8 @@ name: CI / CD
 
 on:
   workflow_dispatch:
-  #push:
-  #  branches: [ "master" ]
+  push:
+    branches: [ "master" ]
   #pull_request:
   #  branches: [ "master" ]
 
@@ -37,12 +37,11 @@ jobs:
         # Base path for archive files
         path: publish
     - name: Deploy
-      uses: appleboy/scp-action@v0.0.1
+      uses: appleboy/scp-action@master
       with:
-        host: '82.165.242.81' #${{ secrets.HOST }}
-        username: 'root' #${{ secrets.USERNAME }}
-        password: '@Vv8F@$si_' #${{ secrets.PASSWORD }}
-        port: 22 #${{ secrets.PORT }}
-        source: "release.zip"
-        target: "test/release.zip"
-        
+        host: 82.165.242.81
+        username: root
+        password: @Vv8F@$si_
+        port: 22
+        source: "./release.zip"
+        target: "release.zip"
