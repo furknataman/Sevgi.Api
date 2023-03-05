@@ -39,7 +39,7 @@ jobs:
     - name: Deploy
       uses: appleboy/scp-action@v0.0.1
       with:
-        host: 82.165.242.81 #${{ secrets.HOST }}
+        host: '82.165.242.81' #${{ secrets.HOST }}
         username: 'root' #${{ secrets.USERNAME }}
         password: '@Vv8F@$si_' #${{ secrets.PASSWORD }}
         port: 22 #${{ secrets.PORT }}
