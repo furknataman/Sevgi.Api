@@ -11,8 +11,8 @@ using Sevgi.Data.Database;
 namespace Sevgi.Data.Migrations
 {
     [DbContext(typeof(SevgiIdentityContext))]
-    [Migration("20230306103246_AddingIsActiveToUser")]
-    partial class AddingIsActiveToUser
+    [Migration("20230306111426_AddedIsActiveToUser")]
+    partial class AddedIsActiveToUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,6 +181,9 @@ namespace Sevgi.Data.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
