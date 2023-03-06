@@ -28,6 +28,8 @@ namespace Sevgi.Api.Controllers
             return Ok(response);
         }
 
+
+
         [AllowAnonymous]
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] RegisterRequest request)
@@ -36,6 +38,8 @@ namespace Sevgi.Api.Controllers
 
             return Ok(response);
         }
+
+ 
 
         [AllowAnonymous]
         [HttpPost("external")]

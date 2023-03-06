@@ -20,6 +20,7 @@ namespace Sevgi.Data.Services
     public interface IAuthService
     {
         Task<string> SignUp(string email, string password);
+       
         Task<string> SignIn(string email, string password);
         Task<AuthResponse> ExternalAuth(AuthRequest request);
         Task<string> SignOut(string email);
@@ -59,6 +60,12 @@ namespace Sevgi.Data.Services
 
             return await SignIn(email, password);
         }
+
+    
+
+
+
+
         public async Task<string> SignUp(User user, string password)
         {
             user.CreatedAt = DateTime.Now;

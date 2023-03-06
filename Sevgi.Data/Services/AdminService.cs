@@ -9,14 +9,16 @@ namespace Sevgi.Data.Services
 {
     public interface IAdminService
     {
-        Task<string> UpdateUser();
+
         public Task<IEnumerable<User>> GetAll();
+        public Task<IdentityResult> Update(string id, string name, string surname, string telephoneNuber, bool status);
     }
     public class AdminService : IAdminService
     {
 
         private readonly UserManager<User> _adminManager;
         private DapperContext _context;
+        private readonly UserManager<User> _userManager;
 
 
         public AdminService(DapperContext dapperContext, UserManager<User> userManager)
@@ -36,20 +38,26 @@ namespace Sevgi.Data.Services
             return allStores;
         }
 
-        public async Task UpdateUser(User userToUpdate)
+
+        public async Task<IdentityResult> Update(string id, string name, string surname, string telephoneNuber, bool status)
         {
-            //check user
-            //set user
-            //update
-            var result = await _adminManager.UpdateAsync(userToUpdate);
-            //check if successful
+            var userToCheck = await _userManager.FindByIdAsync(id);
+            if (userToCheck is null) throw new UserException("User not found ");
+
+            userToCheck.FirstName = name;
+            userToCheck.LastName = surname;
+            userToCheck.LockoutEnabled = status;
+            userToCheck.PhoneNumber = telephoneNuber;
+
+
+            var result = await _userManager.UpdateAsync(userToCheck);
+            return result;
 
         }
 
-        public Task<string> UpdateUser()
-        {
-            throw new NotImplementedException();
-        }
+  
+
+    
     }
 }
 

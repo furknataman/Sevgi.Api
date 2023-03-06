@@ -27,5 +27,13 @@ namespace Sevgi.Api.Controllers
             var tests = await _adminService.GetAll();
             return tests;
         }
+
+        [AllowAnonymous]
+        [HttpPost("update")]
+        public async Task UpdateUser( string id, string name, string surname, string telephoneNuber, bool status)
+        {
+          var response=await _adminService.Update(id: id,name: name, surname:surname, telephoneNuber: telephoneNuber, status: status);
+
+        }
     }
 }
