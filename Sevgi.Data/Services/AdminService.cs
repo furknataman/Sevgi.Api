@@ -1,6 +1,7 @@
 ﻿using System;
 using Dapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Sevgi.Data.Database;
 using Sevgi.Model;
 using Sevgi.Model.Utilities;
@@ -11,12 +12,11 @@ namespace Sevgi.Data.Services
     {
 
         public Task<IEnumerable<User>> GetAll();
-        public Task<IdentityResult> Update(string id, string name, string surname, string telephoneNuber, bool status);
+        public Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone);
     }
     public class AdminService : IAdminService
     {
 
-        private readonly UserManager<User> _adminManager;
         private DapperContext _context;
         private readonly UserManager<User> _userManager;
 
@@ -25,7 +25,7 @@ namespace Sevgi.Data.Services
         {
             //get db here
             _context = dapperContext;
-            _adminManager = userManager;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<User>> GetAll()
@@ -39,25 +39,18 @@ namespace Sevgi.Data.Services
         }
 
 
-        public async Task<IdentityResult> Update(string id, string name, string surname, string telephoneNuber, bool status)
+        public async Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone)
         {
-            var userToCheck = await _userManager.FindByIdAsync(id);
-            if (userToCheck is null) throw new UserException("User not found ");
-
-            userToCheck.FirstName = name;
-            userToCheck.LastName = surname;
-            userToCheck.LockoutEnabled = status;
-            userToCheck.PhoneNumber = telephoneNuber;
-
+            var userToCheck = await _userManager.FindByIdAsync(id) ?? throw new UserException("User not found ");
+            
+            userToCheck.FirstName = firstName;
+            userToCheck.LastName = LastName;
+            userToCheck.PhoneNumber = phone;
 
             var result = await _userManager.UpdateAsync(userToCheck);
             return result;
 
         }
-
-  
-
-    
     }
 }
 

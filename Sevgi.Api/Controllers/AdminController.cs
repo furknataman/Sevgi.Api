@@ -30,10 +30,11 @@ namespace Sevgi.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("update")]
-        public async Task UpdateUser( string id, string name, string surname, string telephoneNuber, bool status)
+        public async Task<IActionResult> UpdateUser(string id, string firstName, string lastName, string phone)
         {
-          var response=await _adminService.Update(id: id,name: name, surname:surname, telephoneNuber: telephoneNuber, status: status);
-
+            var response = await _adminService.UpdateUser(id, firstName, lastName, phone);
+            if (response.Succeeded) return Ok(response);
+            else return BadRequest(response);
         }
     }
 }
