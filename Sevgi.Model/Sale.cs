@@ -7,16 +7,20 @@ using System.Threading.Tasks;
 
 namespace Sevgi.Model
 {
-    public class User : IdentityUser
+    public class Sale
     {
-        //this is the basic user inherited from IdentityUser.
-        //you can modify as you want but make sure you update the database.
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public Genders Gender { get; set; }
-        public DateTime BirthDate { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public bool IsActive { get; set; }
+       
+        public int SaleId { get; set; } 
+        public string BranchCode { get; set; } = string.Empty;
+        public string CashCode { get; set; } = string.Empty;
+        public string CashierCode { get; set; } = string.Empty;
+        public string CardNo { get; set; } = string.Empty;
+        public double Total { get; set; } 
+        public DateTime AddDate { get; set; } 
+        public bool IsReturn { get; set; }
+        public double CardTotal { get; set; }
+
+
 
     }
 }

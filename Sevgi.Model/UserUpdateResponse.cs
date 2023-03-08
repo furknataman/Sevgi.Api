@@ -2,9 +2,12 @@
 
 namespace Sevgi.Model
 {
-    public class AuthResponse
+    public class UpdateUserRequest
     {
-        public string Token { get; set; } = string.Empty;
-        public bool IsRegistered { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Surname { get; set; } = string.Empty;
+        public string phoneNumber { get; set; } = string.Empty;
+        public bool Status { get; set; }
     }
 }

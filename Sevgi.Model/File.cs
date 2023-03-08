@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Sevgi.Model
 {
-	public class File
+	public class UploadableFile
 	{
         public int Id { get; set; }
         public byte[] Data { get; set; }

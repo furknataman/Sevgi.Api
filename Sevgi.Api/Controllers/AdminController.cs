@@ -29,10 +29,18 @@ namespace Sevgi.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("update")]
-        public async Task<IActionResult> UpdateUser(string id, string firstName, string lastName, string phone)
+        [HttpGet("get-sale")]
+        public async Task<IEnumerable<Sale>> getSales()
         {
-            var response = await _adminService.UpdateUser(id, firstName, lastName, phone);
+            var tests = await _adminService.GetAllSell();
+            return tests;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateUser(UpdateUserRequest request)
+        {
+            var response = await _adminService.UpdateUser(request.Id,request.Name ,request.Surname,request.phoneNumber,request.Status);
             if (response.Succeeded) return Ok(response);
             else return BadRequest(response);
         }

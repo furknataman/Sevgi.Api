@@ -12,7 +12,8 @@ namespace Sevgi.Data.Services
     {
 
         public Task<IEnumerable<User>> GetAll();
-        public Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone);
+        public Task<IEnumerable<Sale>> GetAllSell();
+        public Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone, bool status);
     }
     public class AdminService : IAdminService
     {
@@ -39,13 +40,27 @@ namespace Sevgi.Data.Services
         }
 
 
-        public async Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone)
+        public async Task<IEnumerable<Sale>> GetAllSell()
+        {
+
+            var query = "SELECT * from SaleReceipts";
+
+            using var connection = _context.CreateConnection();
+            var allSale = await connection.QueryAsync<Sale>(query);
+            return allSale;
+        }
+
+
+
+
+        public async Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone, bool status)
         {
             var userToCheck = await _userManager.FindByIdAsync(id) ?? throw new UserException("User not found ");
             
             userToCheck.FirstName = firstName;
             userToCheck.LastName = LastName;
             userToCheck.PhoneNumber = phone;
+            userToCheck.IsActive = status;
 
             var result = await _userManager.UpdateAsync(userToCheck);
             return result;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sevgi.Data.Services;
+using Sevgi.Model;
 
 namespace Sevgi.Api.Controllers
 {
@@ -14,19 +15,34 @@ namespace Sevgi.Api.Controllers
         private readonly ILogger<BaseController> _logger;
         private readonly IBaseService _baseService;
 
-        public FileController(ILogger<BaseController> logger, IBaseService baseService)
+        private readonly IUtilService _utilService;
+
+        public FileController(ILogger<BaseController> logger, IUtilService utilService)
         {
             _logger = logger;
-            _baseService = baseService;
+            _utilService = utilService;
         }
+     
+
         [AllowAnonymous]
         [HttpPost("upload-image")]
-        public async Task<String> GetTests()
+        public async Task<IActionResult> UploadImage(IFormFile file)
         {
+            byte[] fileData;
+            using (var target = new MemoryStream())
+            {
+                file.CopyTo(target);
+                fileData = target.ToArray();
+            }
 
-            
-            String test = "Deneme";
-            return test;
+            var fileToUpload = new UploadableFile()
+            {
+                Name = "dene",
+                Data = fileData,
+                Type = "de"
+            };
+            var tests = await _utilService.uploadFile(fileToUpload);
+            return Ok(file);
         }
     }
 }

@@ -25,7 +25,13 @@ namespace Sevgi.Api.Controllers
         {
             var response = await _authService.SignIn(request.Email, request.Password);
 
-            return Ok(response);
+            return Ok(
+                new
+                {
+                    IsSuccessfull=true,
+                    Token= response
+                }
+                );
         }
 
 

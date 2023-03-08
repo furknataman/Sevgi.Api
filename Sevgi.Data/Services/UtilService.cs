@@ -2,13 +2,12 @@
 using Dapper;
 using Sevgi.Data.Database;
 using Sevgi.Model;
-using File = Sevgi.Model.File;
 
 namespace Sevgi.Data.Services
 {
     public interface IUtilService
     {
-        public Task<IEnumerable<File>> uploadFile();
+        public Task<int> uploadFile(UploadableFile newFile);
     }
     public class UtilService : IUtilService
     {
@@ -19,12 +18,16 @@ namespace Sevgi.Data.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<File>> uploadFile()
+        public async Task<int> uploadFile(UploadableFile newFile)
         {
-            var query = "INSERT INTO Files(Data, Name, Type) VALUES(@Data, @Name, @Type)";
+            var query = @"
+                        INSERT INTO Files(Data, Name,Type ) VALUES(@Data, @Name,@Type);
+                        SELECT LAST_INSERT_ID();
+                        ";
 
             using var connection = _context.CreateConnection();
-            var uploadFile = await connection.QueryAsync<File>(query);
+            var uploadFile = await connection.QuerySingleAsync<int>(query, new {Data=newFile.Data, Name=newFile.Name,Type=newFile.Type });
+
             return uploadFile;
         }
     }
