@@ -24,14 +24,7 @@ namespace Sevgi.Api.Controllers
         public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
         {
             var response = await _authService.SignIn(request.Email, request.Password);
-
-            return Ok(
-                new
-                {
-                    IsSuccessfull=true,
-                    Token= response
-                }
-                );
+            return Ok(response);
         }
 
 
@@ -41,7 +34,6 @@ namespace Sevgi.Api.Controllers
         public async Task<IActionResult> SignUp([FromBody] RegisterRequest request)
         {
             var response = await _authService.SignUp(request.Email, request.Password);
-
             return Ok(response);
         }
 

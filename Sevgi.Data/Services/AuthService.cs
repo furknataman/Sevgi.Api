@@ -19,14 +19,12 @@ namespace Sevgi.Data.Services
 {
     public interface IAuthService
     {
-        Task<string> SignUp(string email, string password);
-       
-        Task<string> SignIn(string email, string password);
+        Task<AuthResponse> SignUp(string email, string password);
+        Task<AuthResponse> SignIn(string email, string password);
         Task<AuthResponse> ExternalAuth(AuthRequest request);
         Task<string> SignOut(string email);
         Task ClearUsers();
         Task AddUserInfo(ProfileInformation request);
-
     }
 
     public class AuthService : IAuthService
@@ -40,11 +38,10 @@ namespace Sevgi.Data.Services
             _configuration = configuration;
         }
 
-
-        public async Task<string> SignUp(string email, string password)
+        public async Task<AuthResponse> SignUp(string email, string password)
         {
             var userToCheck = await _userManager.FindByEmailAsync(email);
-            if (userToCheck is not null) throw new UserExistsException($"There already is a user registered with email: {userToCheck.Email}.");
+            if (userToCheck is not null) return new("The user is already registered.");
 
             var userToRegister = new User()
             {
@@ -56,33 +53,31 @@ namespace Sevgi.Data.Services
 
             var result = await _userManager.CreateAsync(userToRegister, password);
 
-            if (!result.Succeeded) throw new UserException($"User with email: {email} cannot be registered. Errors: {GetErrorsText(result.Errors)}");
+            if (!result.Succeeded)return new("Signup is not successful.");
 
-            return await SignIn(email, password);
+            var signinResponse = await SignIn(email, password);
+            signinResponse.IsRegistered = true;
+            
+            return signinResponse;
         }
-
-    
-
-
-
-
-        public async Task<string> SignUp(User user, string password)
+        public async Task<AuthResponse> SignUp(User user, string password)
         {
             user.CreatedAt = DateTime.Now;
 
             var result = await _userManager.CreateAsync(user, password);
 
-            if (!result.Succeeded) throw new UserException($"User with phone: {user.PhoneNumber} cannot be registered. Errors: {GetErrorsText(result.Errors)}");
+            if (!result.Succeeded) return new("Signup is not successful.");
 
-            return await SignIn(user.Email!, password);
+            var signinResponse = await SignIn(user.Email!, password);
+            signinResponse.IsRegistered = true;
+
+            return signinResponse;
         }
-
-        public async Task<string> SignIn(string email, string password)
+        public async Task<AuthResponse> SignIn(string email, string password)
         {
             var userToCheck = await _userManager.FindByEmailAsync(email);
-            if (userToCheck is null) throw new UserNotFoundException($"There is no such user with email: {email}");
-
-            if (!await _userManager.CheckPasswordAsync(userToCheck, password)) throw new InvalidPasswordException($"Unable to authenticate user {email}");
+            if (userToCheck is null) return new("User not found.");
+            if (!await _userManager.CheckPasswordAsync(userToCheck, password)) return new("One or more of the credentials are not valid.");
 
             var authClaims = new List<Claim>
             {
@@ -92,11 +87,15 @@ namespace Sevgi.Data.Services
 
             var token = GetToken(authClaims);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new()
+            {
+                IsSuccessful = true,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
         }
         private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
@@ -111,7 +110,6 @@ namespace Sevgi.Data.Services
         {
             return string.Join(", ", errors.Select(error => error.Description).ToArray());
         }
-
         public async Task<AuthResponse> ExternalAuth(AuthRequest request)
         {
             var response = new AuthResponse();
@@ -120,7 +118,7 @@ namespace Sevgi.Data.Services
                 case AuthProviders.GOOGLE:
                     //verify google
                     var payload = await VerifyGoogleToken(request.IdToken);
-                    if (payload == null) throw new InvalidTokenException("Google token is invalid, cannot authorize.");
+                    if (payload == null) return new("Invalid Token.");
 
                     //check if registered
                     var googleLoginInfo = new UserLoginInfo(request.Provider.ToString(), payload.Subject, "Google");
@@ -128,8 +126,8 @@ namespace Sevgi.Data.Services
                     response.IsRegistered = userFromGoogle != null;
 
                     //register if not
-                    if (!response.IsRegistered) response.Token = await SignUp(payload.Email, payload.Email.GeneratePassword());
-                    else response.Token = await SignIn(payload.Email, payload.Email.GeneratePassword());
+                    if (!response.IsRegistered) response = await SignUp(payload.Email, payload.Email.GeneratePassword());
+                    else response = await SignIn(payload.Email, payload.Email.GeneratePassword());
 
                     userFromGoogle = userFromGoogle is null ? await _userManager.FindByEmailAsync(payload.Email) : userFromGoogle;
 
@@ -141,10 +139,10 @@ namespace Sevgi.Data.Services
 
                     //verify firebase token
                     var firebaseToken = await FirebaseAuth.DefaultInstance!.VerifyIdTokenAsync(request.IdToken);
-                    if (firebaseToken is null) throw new InvalidTokenException();
+                    if (firebaseToken is null) return new("Invalid Token.");
 
                     var firebaseUser = await FirebaseAuth.DefaultInstance.GetUserAsync(firebaseToken.Uid);
-                    if (firebaseUser is null) throw new InvalidTokenException();
+                    if (firebaseUser is null) return new("Invalid Token.");
 
                     //check if registered
                     var firebaseLoginInfo = new UserLoginInfo(request.Provider.ToString(), firebaseUser.Uid, "Firebase");
@@ -159,8 +157,8 @@ namespace Sevgi.Data.Services
                     response.IsRegistered = userFromFirebase != null;
 
                     //register if not
-                    if (userFromFirebase == null) response.Token = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
-                    else response.Token = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
+                    if (userFromFirebase == null) response = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
+                    else response    = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
 
                     userFromFirebase = userFromFirebase is null ? await _userManager.FindByEmailAsync(userToRegister.Email) : userFromFirebase;
 
@@ -171,7 +169,7 @@ namespace Sevgi.Data.Services
                 case AuthProviders.INTERNAL:
                 case AuthProviders.APPLE:
                 default:
-                    throw new Exception("The option you requested is not supported, please use available options.");
+                    return new("This provider is not supported.");
             }
         }
 
