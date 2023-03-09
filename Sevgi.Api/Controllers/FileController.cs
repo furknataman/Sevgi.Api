@@ -44,5 +44,14 @@ namespace Sevgi.Api.Controllers
             var tests = await _utilService.uploadFile(fileToUpload);
             return Ok(file);
         }
+
+        [AllowAnonymous]
+        [HttpGet("download-image")]
+        public async Task<IActionResult> DownLoadImage( int id)
+        {
+           
+            var tests = await _utilService.downloadFile(id);
+            return Ok(tests);
+        }
     }
 }

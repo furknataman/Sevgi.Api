@@ -8,6 +8,7 @@ namespace Sevgi.Data.Services
     public interface IUtilService
     {
         public Task<int> uploadFile(UploadableFile newFile);
+        public Task<UploadableFile> downloadFile(int id);
     }
     public class UtilService : IUtilService
     {
@@ -27,6 +28,18 @@ namespace Sevgi.Data.Services
 
             using var connection = _context.CreateConnection();
             var uploadFile = await connection.QuerySingleAsync<int>(query, new {Data=newFile.Data, Name=newFile.Name,Type=newFile.Type });
+
+            return uploadFile;
+        }
+
+        public async Task<UploadableFile> downloadFile(int id)
+        {
+            var query = @"
+                        SELECT * FROM Files WHERE Id=@Id
+                        ";
+
+            using var connection = _context.CreateConnection();
+            var uploadFile = await connection.QuerySingleAsync<UploadableFile>(query, new {Id=id});
 
             return uploadFile;
         }
