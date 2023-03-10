@@ -44,7 +44,7 @@ namespace Sevgi.Api.Controllers
         }
 
 
-
+        [AllowAnonymous]
         [HttpGet("info")]
         public async Task<IActionResult> InfoProfile()
         {
@@ -53,6 +53,17 @@ namespace Sevgi.Api.Controllers
             if (user is null) return BadRequest();
 
             var result=await _profileService.GetInfo();
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("info-sale")]
+        public async Task<IActionResult> InfoUserSale(int id)
+        {
+            //get the authenticated user
+          
+
+            var result = await _profileService.GetUserSale( id);
             return Ok(result);
         }
     }

@@ -9,6 +9,7 @@ namespace Sevgi.Data.Services
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
         public Task<String> GetInfo();
+        public Task<IEnumerable<Sale>> GetUserSale(int id);
     }
     public class ProfileService : IProfileService
     {
@@ -33,6 +34,15 @@ namespace Sevgi.Data.Services
         public async Task<String> GetInfo()
         {
             return "SomeThing";
+        }
+        public async Task<IEnumerable<Sale>> GetUserSale(int id)
+        {
+
+            var query = "SELECT * from SaleReceipts Where CardNo=@Id ";
+
+            using var connection = _context.CreateConnection();
+            var allSale = await connection.QueryAsync<Sale>(query, new { Id = id });
+            return allSale;
         }
     }
 }
