@@ -9,7 +9,7 @@ namespace Sevgi.Data.Services
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
         public Task<String> GetInfo();
-        public Task<IEnumerable<Sale>> GetUserSale(int id);
+        public Task<IEnumerable<Sale>> GetUserSale(String id);
     }
     public class ProfileService : IProfileService
     {
@@ -35,13 +35,13 @@ namespace Sevgi.Data.Services
         {
             return "SomeThing";
         }
-        public async Task<IEnumerable<Sale>> GetUserSale(int id)
+        public async Task<IEnumerable<Sale>> GetUserSale(String id)
         {
 
-            var query = "SELECT * from SaleReceipts Where CardNo=@Id ";
+            var query = "SELECT * from SaleReceipts Where CardNo=@CardNo";
 
             using var connection = _context.CreateConnection();
-            var allSale = await connection.QueryAsync<Sale>(query, new { Id = id });
+            var allSale = await connection.QueryAsync<Sale>(query, new { CardNo = id });
             return allSale;
         }
     }

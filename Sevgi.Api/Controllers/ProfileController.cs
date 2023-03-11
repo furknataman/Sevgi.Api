@@ -58,7 +58,7 @@ namespace Sevgi.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("info-sale")]
-        public async Task<IActionResult> InfoUserSale(int id)
+        public async Task<IActionResult> InfoUserSale(String id)
         {
             //get the authenticated user
           
