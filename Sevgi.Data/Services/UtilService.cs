@@ -8,7 +8,7 @@ namespace Sevgi.Data.Services
     public interface IUtilService
     {
         public Task<int> uploadFile(UploadableFile newFile);
-        public Task<UploadableFile> downloadFile(int id);
+        public Task<UploadableFile> DownloadFile(int id);
     }
     public class UtilService : IUtilService
     {
@@ -32,7 +32,7 @@ namespace Sevgi.Data.Services
             return uploadFile;
         }
 
-        public async Task<UploadableFile> downloadFile(int id)
+        public async Task<UploadableFile> DownloadFile(int id)
         {
             var query = @"
                         SELECT * FROM Files WHERE Id=@Id

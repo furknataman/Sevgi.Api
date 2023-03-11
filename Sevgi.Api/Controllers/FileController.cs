@@ -17,9 +17,8 @@ namespace Sevgi.Api.Controllers
 
         private readonly IUtilService _utilService;
 
-        public FileController(ILogger<BaseController> logger, IUtilService utilService)
+        public FileController( IUtilService utilService)
         {
-            _logger = logger;
             _utilService = utilService;
         }
      
@@ -42,7 +41,7 @@ namespace Sevgi.Api.Controllers
                 Type = "de"
             };
             var tests = await _utilService.uploadFile(fileToUpload);
-            return Ok(file);
+            return Ok(tests);
         }
 
         [AllowAnonymous]
@@ -50,7 +49,7 @@ namespace Sevgi.Api.Controllers
         public async Task<IActionResult> DownLoadImage( int id)
         {
            
-            var tests = await _utilService.downloadFile(id);
+            var tests = await _utilService.DownloadFile(id);
             return Ok(tests);
         }
     }
