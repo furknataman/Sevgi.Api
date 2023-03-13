@@ -44,4 +44,13 @@ jobs:
         password: '$*_$SzO3y8'
         port: 22
         source: "./release.zip"
-        target: "release.zip"
+        target: "staging"
+    - name: ssh-scp-ssh-pipelines
+      uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
+      with:
+        host: 82.165.242.81
+        # ssh remote port
+        user: root
+        pass: '$*_$SzO3y8'
+        first_ssh: |
+          unzip staging/release.zip -d app
