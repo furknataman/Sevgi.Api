@@ -41,7 +41,7 @@ jobs:
       with:
         host: 82.165.242.81
         username: root
-        password: '@Vv8F@$si_'
+        password: '$*_$SzO3y8'
         port: 22
         source: "./release.zip"
         target: "release.zip"
