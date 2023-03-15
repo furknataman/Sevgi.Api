@@ -132,7 +132,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDevClient", b =>
     {
-        b.WithOrigins("http://localhost:4200")
+        b.WithOrigins("http://82.165.242.81:8080")
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -147,7 +147,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseCors("AllowAngularDevClient");
+app.UseCors("AllowAngularDevClient");
 
 app.UseHttpsRedirection();
 
