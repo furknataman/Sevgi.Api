@@ -130,14 +130,12 @@ builder.Services.AddSwaggerGen(c =>
 //adding CORS policy for dev client
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularDevClient", b =>
-    {
-        b.WithOrigins("http://82.165.242.81:8080")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials(); 
-    });
+    options.AddPolicy("CorsPolicy",
+         builder => builder
+             .WithOrigins("http://82.165.242.81:8080")
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             .AllowCredentials());
 });
 
 var app = builder.Build();
@@ -149,7 +147,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAngularDevClient");
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
