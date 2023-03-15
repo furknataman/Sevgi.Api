@@ -29,7 +29,7 @@ namespace Sevgi.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("get-sale")]
+        [HttpGet("get-sales")]
         public async Task<IEnumerable<Sale>> getSales()
         {
             var tests = await _adminService.GetAllSell();
