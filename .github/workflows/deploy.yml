@@ -51,5 +51,9 @@ jobs:
         host: 82.165.242.81
         username: root
         password: '$*_$SzO3y8'
-        script: unzip -o staging/release.zip -d app
-                rm -rf staging/
+        script: |
+          unzip -o staging/release.zip -d app
+          rm -rf staging/
+        
+       
+               
