@@ -52,6 +52,7 @@ jobs:
         username: root
         password: '$*_$SzO3y8'
         script: |
+          rm -rf app
           unzip -o staging/release.zip -d app
           rm -rf staging/
         
