@@ -20,7 +20,7 @@ namespace Sevgi.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("sign-inn")]
+        [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
         {
             var response = await _authService.SignIn(request.Email, request.Password);
