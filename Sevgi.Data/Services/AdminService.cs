@@ -11,7 +11,7 @@ namespace Sevgi.Data.Services
     public interface IAdminService
     {
 
-        public Task<IEnumerable<User>> GetAll();
+        public Task<IEnumerable<UserView>> GetAll();
         public Task<IEnumerable<Sale>> GetAllSell();
         public Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone, bool status);
     }
@@ -29,14 +29,47 @@ namespace Sevgi.Data.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<UserView>> GetAll()
         {
 
-            var query = "SELECT * from Users";
+            /* var query = "SELECT * from Users";
+
+             using var connection = _context.CreateConnection();
+             var allUser = await connection.QueryAsync<UserView>(query);
+             return allUser;*/
+
+            /* var query = @"
+                         SELECT U.Id, U.FirstName, U.LastName, U.Gender, U.BirthDate, U.CreatedAt, U.IsActive, U.FileId, SUM(B.Bonus) as Bonus, SUM(B.Total) as TotalAmount
+                         FROM Users U
+                         JOIN UserBonus UB ON U.Id = UB.UserId
+                         JOIN Bonus B ON UB.BonusId = B.Id
+                         GROUP BY U.Id, U.FirstName, U.LastName, U.Gender, U.BirthDate, U.CreatedAt, U.IsActive, U.FileId";
+
+             using var connection = _context.CreateConnection();
+             var allUsers = await connection.QueryAsync<UserView>(query);
+             return allUsers;*/
+            var query = @"
+                        SELECT U.Id,
+                        U.FirstName,
+                        U.LastName,
+                        U.Gender,
+                        U.PhoneNumber,
+                        U.BirthDate,
+                        U.CreatedAt,
+                        U.IsActive,
+                        U.FileId,
+                        B.Bonus,
+                        B.Total as TotalAmount
+                        FROM Users U
+                        JOIN UserBonus UB ON U.Id = UB.UserId
+                        JOIN Bonus B ON UB.BonusId = B.Id";
 
             using var connection = _context.CreateConnection();
-            var allStores = await connection.QueryAsync<User>(query);
-            return allStores;
+            var allUsers = await connection.QueryAsync<UserView>(query);
+            return allUsers;
+
+
+
         }
 
 
