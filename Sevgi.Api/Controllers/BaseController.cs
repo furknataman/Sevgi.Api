@@ -20,7 +20,7 @@ namespace Sevgi.Api.Controllers
             _baseService = baseService;
         }
 
-        [AllowAnonymus]
+        [AllowAnonymous]
         [HttpGet("get-all")]
         public async Task<IEnumerable<int>> GetTests()
         {
