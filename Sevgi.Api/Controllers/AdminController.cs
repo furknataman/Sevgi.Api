@@ -21,7 +21,7 @@ namespace Sevgi.Api.Controllers
             _adminService = adminService;
         }
         [AllowAnonymous]
-        [HttpGet("get-users")]
+        [HttpGet("get-all-users")]
         public async Task<IEnumerable<User>> GetUsers()
         {
             var tests = await _adminService.GetAll();
@@ -29,7 +29,7 @@ namespace Sevgi.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("get-sales")]
+        [HttpGet("get-all-sale")]
         public async Task<IEnumerable<Sale>> getSales()
         {
             var tests = await _adminService.GetAllSell();
