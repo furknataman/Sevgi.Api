@@ -45,6 +45,7 @@ jobs:
         port: 22
         source: "./release.zip"
         target: "staging"
+        rm: true
     - name: Unzip
       uses: appleboy/ssh-action@v0.1.8
       with:
@@ -52,9 +53,10 @@ jobs:
         username: root
         password: '$*_$SzO3y8'
         script: |
-          rm -rf app
+          systemctl stop sevgiapi.service
+          rm -rf app/publish
           unzip -o staging/release.zip -d app
-          rm -rf staging/
+          systemctl start sevgiapi.service
         
        
                
