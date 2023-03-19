@@ -24,6 +24,7 @@ namespace Sevgi.Api.Controllers
         }
 
         [HttpPost("update")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateProfile(ProfileInformation request)
         {
             //get the authenticated user

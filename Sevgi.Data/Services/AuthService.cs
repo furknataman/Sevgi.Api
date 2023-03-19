@@ -47,6 +47,7 @@ namespace Sevgi.Data.Services
             {
                 UserName = email,
                 Email = email,
+               
                 SecurityStamp = Guid.NewGuid().ToString(),
                 CreatedAt = DateTime.Now
             };

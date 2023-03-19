@@ -33,6 +33,7 @@ namespace Sevgi.Data.Services
         }
         public async Task<String> GetInfo()
         {
+            //var userToCheck = await _userManager.fin (email);
             return "SomeThing";
         }
         public async Task<IEnumerable<Sale>> GetUserSale(String id)

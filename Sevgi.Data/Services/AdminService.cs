@@ -38,16 +38,7 @@ namespace Sevgi.Data.Services
              var allUser = await connection.QueryAsync<UserView>(query);
              return allUser;*/
 
-            /* var query = @"
-                         SELECT U.Id, U.FirstName, U.LastName, U.Gender, U.BirthDate, U.CreatedAt, U.IsActive, U.FileId, SUM(B.Bonus) as Bonus, SUM(B.Total) as TotalAmount
-                         FROM Users U
-                         JOIN UserBonus UB ON U.Id = UB.UserId
-                         JOIN Bonus B ON UB.BonusId = B.Id
-                         GROUP BY U.Id, U.FirstName, U.LastName, U.Gender, U.BirthDate, U.CreatedAt, U.IsActive, U.FileId";
-
-             using var connection = _context.CreateConnection();
-             var allUsers = await connection.QueryAsync<UserView>(query);
-             return allUsers;*/
+          
             var query = @"
                         SELECT U.Id,
                         U.FirstName,
