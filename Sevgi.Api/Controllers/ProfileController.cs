@@ -45,16 +45,29 @@ namespace Sevgi.Api.Controllers
         }
 
 
-        [AllowAnonymous]
+
         [HttpGet("info")]
         public async Task<IActionResult> InfoProfile()
         {
             //get the authenticated user
             var user = await GetCurrentUserAsync();
             if (user is null) return BadRequest();
+            var viewModel = new UserView {
+                Id=user.Id,
+                FirstName = user.FirstName,
+                LastName=user.LastName,
+                Gender=user.Gender,
+                TotalAmount=user.TotalAmount,
+                BirthDate=user.BirthDate,
+                FileId=user.FileId,
+                PhoneNumber=user.PhoneNumber,
+                IsActive=user.IsActive,
 
-            var result=await _profileService.GetInfo();
-            return Ok(result);
+            };
+
+
+        var result=await _profileService.GetInfo(user);
+            return Ok(viewModel);
         }
 
         [AllowAnonymous]
