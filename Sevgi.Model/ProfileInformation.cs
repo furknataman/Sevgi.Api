@@ -6,7 +6,7 @@ namespace Sevgi.Model
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-     //   public DateTime BirthDate { get; set; }
-     //   public Genders Gender { get; set; }
+        public DateTime BirthDate { get; set; }
+        public Genders Gender { get; set; }
     }
 }
