@@ -17,10 +17,9 @@ namespace Sevgi.Api.Controllers
 
         public AdminControlller(IAdminService adminService)
         {
-
             _adminService = adminService;
         }
-        [AllowAnonymous]
+
         [HttpGet("get-users")]
         public async Task<IEnumerable<UserView>> GetUsers()
         {
@@ -28,7 +27,6 @@ namespace Sevgi.Api.Controllers
             return tests;
         }
 
-        [AllowAnonymous]
         [HttpGet("get-sales")]
         public async Task<IEnumerable<Sale>> getSales()
         {
@@ -36,7 +34,6 @@ namespace Sevgi.Api.Controllers
             return tests;
         }
 
-        [AllowAnonymous]
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser(UpdateUserRequest request)
         {

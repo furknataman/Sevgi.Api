@@ -8,8 +8,9 @@ namespace Sevgi.Data.Services
     public interface IProfileService
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
+        public Task ClaimCard(string userId);
         public Task<UserView> GetInfo(User UserInfo);
-        public Task<IEnumerable<Sale>> GetUserSale(String id);
+        public Task<IEnumerable<Sale>> GetUserSale(string id);
     }
     public class ProfileService : IProfileService
     {
@@ -31,6 +32,28 @@ namespace Sevgi.Data.Services
 
             await _userManager.UpdateAsync(userToUpdate);
         }
+        public async Task ClaimCard(string userId)
+        {
+            var query = @"
+                //select claimed and active cards
+                //select cards not in that group
+                //select 1
+                //perform insert
+
+                SELECT TOP 1 @CardId = C.Id
+                FROM Cards C
+                WHERE C.Id NOT IN (
+                    SELECT UC.Id
+                    FROM UserCards UC
+                    WHERE IsActive = 1
+                ) AND IsDeleted = 0
+                
+                INSERT INTO UserCards (UserId, CardId, IsActive) VALUES(@UserId, @CardId, 1)
+            ";
+
+            using var connection = _context.CreateConnection();
+            await connection.ExecuteAsync(query, new { UserId = userId });
+        }
         public async Task<UserView> GetInfo(User user)
         {
             var viewModel = new UserView
@@ -48,9 +71,8 @@ namespace Sevgi.Data.Services
             };
             return viewModel;
         }
-        public async Task<IEnumerable<Sale>> GetUserSale(String id)
+        public async Task<IEnumerable<Sale>> GetUserSale(string id)
         {
-
             var query = "SELECT * from SaleReceipts Where CardNo=@CardNo";
 
             using var connection = _context.CreateConnection();

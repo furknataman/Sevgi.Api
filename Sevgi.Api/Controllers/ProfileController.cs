@@ -24,7 +24,6 @@ namespace Sevgi.Api.Controllers
         }
 
         [HttpPost("update")]
-
         public async Task<IActionResult> UpdateProfile(ProfileInformation request)
         {   
             //get the authenticated user
@@ -34,6 +33,18 @@ namespace Sevgi.Api.Controllers
             await _profileService.Update(user, request);
             return Ok();
         }
+
+        [HttpGet("claim-card")]
+        public async Task<IActionResult> ClaimCard()
+        {
+            //get the authenticated user
+            var user = await GetCurrentUserAsync();
+            if (user is null) return BadRequest();
+
+            await _profileService.ClaimCard(user.Id);
+            return Ok();
+        }
+
         private async Task<User?> GetCurrentUserAsync()
         {
             //security first
@@ -45,17 +56,14 @@ namespace Sevgi.Api.Controllers
         }
 
 
-
         [HttpGet("info")]
         public async Task<IActionResult> InfoProfile()
         {
             //get the authenticated user
             var user = await GetCurrentUserAsync();
             if (user is null) return BadRequest();
-            
-
-
-        var result=await _profileService.GetInfo(user);
+    
+            var result=await _profileService.GetInfo(user);
             return Ok(result);
         }
 
@@ -64,8 +72,6 @@ namespace Sevgi.Api.Controllers
         public async Task<IActionResult> InfoUserSale(String id)
         {
             //get the authenticated user
-          
-
             var result = await _profileService.GetUserSale( id);
             return Ok(result);
         }
