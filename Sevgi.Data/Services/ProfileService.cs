@@ -55,7 +55,7 @@ namespace Sevgi.Data.Services
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { UserId = userId });
         }
-        public async Task<IEnumerable< UserInfo>> GetUserInfo(User user)
+        public async Task<IEnumerable<UserInfo>> GetUserInfo(User user)
         {
 
             var query = @"SELECT U.*, B.*, UB.*
@@ -85,6 +85,7 @@ namespace Sevgi.Data.Services
         public async Task<IEnumerable<UserSale>> GetUserSale(string id)
         {
             var query = @"SELECT S.*, St.fileid, St.Name
+                          
                           FROM SaleReceipts S
                           JOIN Stores St ON S.BranchCode = St.ExternalId
                           WHERE S.CardNo = @CardNo";
