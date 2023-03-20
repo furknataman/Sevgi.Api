@@ -61,9 +61,9 @@ namespace Sevgi.Api.Controllers
         {
             //get the authenticated user
             var user = await GetCurrentUserAsync();
-            if (user is null) return BadRequest();
+           if (user is null) return BadRequest();
 
-            var result = await _profileService.GetUserInfo(user);
+            var result = await _profileService.GetUserInfo(user.Id);
             return Ok(result);
         }
 
