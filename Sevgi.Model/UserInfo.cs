@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sevgi.Model
 {
-    public class UserView 
+    public class UserInfo 
     {
         public string Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
@@ -20,6 +20,7 @@ namespace Sevgi.Model
         public double TotalAmount { get; set; }
         public double Bonus { get; set; }
         public int FileId { get; set; }
+        public string CardNo { get; set; } = string.Empty;
 
 
     }

@@ -9,8 +9,9 @@ namespace Sevgi.Data.Services
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
         public Task ClaimCard(string userId);
-        public Task<UserView> GetInfo(User UserInfo);
-        public Task<IEnumerable<Sale>> GetUserSale(string id);
+        public Task<IEnumerable< UserInfo>> GetUserInfo(User UserInfo);
+        
+        public Task<IEnumerable<UserSale>> GetUserSale(string id);
     }
     public class ProfileService : IProfileService
     {
@@ -54,9 +55,19 @@ namespace Sevgi.Data.Services
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { UserId = userId });
         }
-        public async Task<UserView> GetInfo(User user)
+        public async Task<IEnumerable< UserInfo>> GetUserInfo(User user)
         {
-            var viewModel = new UserView
+
+            var query = @"SELECT U.*, B.*, UB.*
+                        FROM Users U
+                        JOIN UserBonus UB ON U.id = UB.UserId
+                        JOIN Bonus B ON UB.BonusId = B.Id
+                        WHERE U.Id = 0fc89eaa-7768-4206-a575-a65750a16408";
+
+            using var connection = _context.CreateConnection();
+            var userInfo = await connection.QueryAsync<UserInfo>(query, new {UserId =user.Id});
+            return userInfo;
+            /*var viewModel = new UserView
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -69,15 +80,20 @@ namespace Sevgi.Data.Services
                 IsActive = user.IsActive,
 
             };
-            return viewModel;
+            return viewModel;*/
         }
-        public async Task<IEnumerable<Sale>> GetUserSale(string id)
+        public async Task<IEnumerable<UserSale>> GetUserSale(string id)
         {
-            var query = "SELECT * from SaleReceipts Where CardNo=@CardNo";
+            var query = @"SELECT S.*, St.fileid, St.Name
+                          FROM SaleReceipts S
+                          JOIN Stores St ON S.BranchCode = St.ExternalId
+                          WHERE S.CardNo = @CardNo";
 
             using var connection = _context.CreateConnection();
-            var allSale = await connection.QueryAsync<Sale>(query, new { CardNo = id });
+            var allSale = await connection.QueryAsync<UserSale>(query, new { CardNo = id });
             return allSale;
         }
+
+
     }
 }

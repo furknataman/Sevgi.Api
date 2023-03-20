@@ -25,7 +25,7 @@ namespace Sevgi.Api.Controllers
 
         [HttpPost("update")]
         public async Task<IActionResult> UpdateProfile(ProfileInformation request)
-        {   
+        {
             //get the authenticated user
             var user = await GetCurrentUserAsync();
             if (user is null) return BadRequest();
@@ -62,8 +62,8 @@ namespace Sevgi.Api.Controllers
             //get the authenticated user
             var user = await GetCurrentUserAsync();
             if (user is null) return BadRequest();
-    
-            var result=await _profileService.GetInfo(user);
+
+            var result = await _profileService.GetUserInfo(user);
             return Ok(result);
         }
 
