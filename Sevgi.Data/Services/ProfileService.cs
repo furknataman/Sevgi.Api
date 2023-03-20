@@ -9,7 +9,7 @@ namespace Sevgi.Data.Services
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
         public Task ClaimCard(string userId);
-        public Task<IEnumerable< UserInfo>> GetUserInfo(String id);
+        public Task <UserInfo> GetUserInfo(String id);
         
         public Task<IEnumerable<UserSale>> GetUserSale(string id);
     }
@@ -55,7 +55,7 @@ namespace Sevgi.Data.Services
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { UserId = userId });
         }
-        public async Task<IEnumerable<UserInfo>> GetUserInfo(String Id)
+        public async Task<UserInfo> GetUserInfo(String Id)
         {
             
             var query = @"SELECT U.*, B.*, UB.*
@@ -65,7 +65,7 @@ namespace Sevgi.Data.Services
                         WHERE U.Id = @UserId";
 
             using var connection = _context.CreateConnection();
-            var userInfo = await connection.QueryAsync<UserInfo>(query, new {UserId =Id});
+            var userInfo = await connection.QuerySingleAsync<UserInfo>(query, new {UserId =Id});
             return userInfo;
             /*var viewModel = new UserView
             {
