@@ -8,7 +8,7 @@ namespace Sevgi.Data.Services
     public interface IProfileService
     {
         public Task Update(User userToUpdate, ProfileInformation newInfo);
-        public Task<User> GetInfo(User UserInfo);
+        public Task<UserView> GetInfo(User UserInfo);
         public Task<IEnumerable<Sale>> GetUserSale(String id);
     }
     public class ProfileService : IProfileService
@@ -31,10 +31,22 @@ namespace Sevgi.Data.Services
 
             await _userManager.UpdateAsync(userToUpdate);
         }
-        public async Task<User> GetInfo(User UserInfo)
+        public async Task<UserView> GetInfo(User user)
         {
-            //var userToCheck = await _userManager.fin (email);
-            return UserInfo;
+            var viewModel = new UserView
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Gender = user.Gender,
+                TotalAmount = user.TotalAmount,
+                BirthDate = user.BirthDate,
+                FileId = user.FileId,
+                //PhoneNumber=user.PhoneNumber,
+                IsActive = user.IsActive,
+
+            };
+            return viewModel;
         }
         public async Task<IEnumerable<Sale>> GetUserSale(String id)
         {
