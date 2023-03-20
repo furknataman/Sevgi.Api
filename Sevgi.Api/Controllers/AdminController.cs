@@ -19,21 +19,21 @@ namespace Sevgi.Api.Controllers
         {
             _adminService = adminService;
         }
-
+        [AllowAnonymous]
         [HttpGet("get-users")]
         public async Task<IEnumerable<UserView>> GetUsers()
         {
             var tests = await _adminService.GetAll();
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpGet("get-sales")]
         public async Task<IEnumerable<Sale>> getSales()
         {
             var tests = await _adminService.GetAllSell();
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser(UpdateUserRequest request)
         {
