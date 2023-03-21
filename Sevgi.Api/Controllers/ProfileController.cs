@@ -55,7 +55,7 @@ namespace Sevgi.Api.Controllers
             return user;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("info")]
         public async Task<IActionResult> InfoProfile()
         {
@@ -67,9 +67,9 @@ namespace Sevgi.Api.Controllers
             return Ok(result);
         }
 
-       
+
         [HttpGet("info-sale")]
-        public async Task<IActionResult> InfoUserSale([FromBody] String id)
+        public async Task<IActionResult> InfoUserSale(String id)
         {
             //get the authenticated user
             var result = await _profileService.GetUserSale( id);

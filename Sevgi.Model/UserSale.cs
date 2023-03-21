@@ -19,7 +19,7 @@ namespace Sevgi.Model
         public DateTime AddDate { get; set; } 
         public double CardTotal { get; set; }
         public int FileId { get; set; }
-        public String Name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
 
 
