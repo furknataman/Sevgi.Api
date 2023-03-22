@@ -31,14 +31,7 @@ namespace Sevgi.Data.Services
 
         public async Task<IEnumerable<UserView>> GetAll()
         {
-
-            /* var query = "SELECT * from Users";
-
-             using var connection = _context.CreateConnection();
-             var allUser = await connection.QueryAsync<UserView>(query);
-             return allUser;*/
-
-          
+    
             var query = @"
                         SELECT U.Id,
                         U.FirstName,
