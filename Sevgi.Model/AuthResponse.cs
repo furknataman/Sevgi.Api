@@ -15,7 +15,7 @@ namespace Sevgi.Model
         }
         public string Token { get; set; } = string.Empty;
         public bool IsSuccessful { get; set; }
-        public bool IsRegistered { get; set; }
+        public bool IsUserReady { get; set; }
         public string Message { get; set; } = string.Empty;
     }
 }

@@ -30,6 +30,7 @@ namespace Sevgi.Data.Services
             userToUpdate.LastName = newInfo.LastName;
             userToUpdate.Gender = newInfo.Gender;
             userToUpdate.BirthDate = newInfo.BirthDate;
+            userToUpdate.IsReady = true;
 
             await _userManager.UpdateAsync(userToUpdate);
         }

@@ -19,7 +19,6 @@ namespace Sevgi.Model
         public bool IsActive { get; set; }
         public double TotalAmount { get; set; }
         public int FileId { get; set; }
-
-
+        public bool IsReady { get; set; }
     }
 }

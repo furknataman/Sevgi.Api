@@ -57,7 +57,6 @@ namespace Sevgi.Data.Services
             if (!result.Succeeded)return new("Signup is not successful.");
 
             var signinResponse = await SignIn(email, password);
-            signinResponse.IsRegistered = true;
             
             return signinResponse;
         }
@@ -70,7 +69,6 @@ namespace Sevgi.Data.Services
             if (!result.Succeeded) return new("Signup is not successful.");
 
             var signinResponse = await SignIn(user.Email!, password);
-            signinResponse.IsRegistered = true;
 
             return signinResponse;
         }
@@ -124,16 +122,19 @@ namespace Sevgi.Data.Services
                     //check if registered
                     var googleLoginInfo = new UserLoginInfo(request.Provider.ToString(), payload.Subject, "Google");
                     var userFromGoogle = await _userManager.FindByEmailAsync(payload.Email);
-                    response.IsRegistered = userFromGoogle != null;
 
                     //register if not
-                    if (!response.IsRegistered) response = await SignUp(payload.Email, payload.Email.GeneratePassword());
+                    if (userFromGoogle is null) response = await SignUp(payload.Email, payload.Email.GeneratePassword());
                     else response = await SignIn(payload.Email, payload.Email.GeneratePassword());
 
                     userFromGoogle = userFromGoogle is null ? await _userManager.FindByEmailAsync(payload.Email) : userFromGoogle;
 
                     //add login
                     await _userManager.AddLoginAsync(userFromGoogle!, googleLoginInfo);
+
+                    //check if registration complete
+                    response.IsUserReady = userFromGoogle!.IsReady;
+
                     return response;
 
                 case AuthProviders.FIREBASE:
@@ -155,16 +156,19 @@ namespace Sevgi.Data.Services
                         PhoneNumber = firebaseUser.PhoneNumber,
                         SecurityStamp = Guid.NewGuid().ToString()
                     };
-                    response.IsRegistered = userFromFirebase != null;
 
                     //register if not
-                    if (userFromFirebase == null) response = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
-                    else response    = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
+                    if (userFromFirebase is null) response = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
+                    else response = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
 
                     userFromFirebase = userFromFirebase is null ? await _userManager.FindByEmailAsync(userToRegister.Email) : userFromFirebase;
 
                     //add login
                     await _userManager.AddLoginAsync(userFromFirebase!, firebaseLoginInfo);
+
+                    //check if registration complete
+                    response.IsUserReady = userFromFirebase!.IsReady;
+                    
                     return response;
 
                 case AuthProviders.INTERNAL:
