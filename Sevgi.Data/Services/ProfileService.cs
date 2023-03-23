@@ -68,20 +68,7 @@ namespace Sevgi.Data.Services
             using var connection = _context.CreateConnection();
             var userInfo = await connection.QuerySingleAsync<UserInfo>(query, new {UserId =Id});
             return userInfo;
-            /*var viewModel = new UserView
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Gender = user.Gender,
-                TotalAmount = user.TotalAmount,
-                BirthDate = user.BirthDate,
-                FileId = user.FileId,
-                //PhoneNumber=user.PhoneNumber,
-                IsActive = user.IsActive,
-
-            };
-            return viewModel;*/
+         
         }
         public async Task<IEnumerable<UserSale>> GetUserSale(string id)
         {

@@ -16,6 +16,7 @@ namespace Sevgi.Model
         public Genders Gender { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
         public bool IsReady { get; set; }
         public double Total { get; set; }
         public double Bonus { get; set; }
