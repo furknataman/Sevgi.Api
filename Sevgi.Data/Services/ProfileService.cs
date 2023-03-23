@@ -37,20 +37,24 @@ namespace Sevgi.Data.Services
         public async Task ClaimCard(string userId)
         {
             var query = @"
-                //select claimed and active cards
-                //select cards not in that group
-                //select 1
-                //perform insert
-
-                SELECT TOP 1 @CardId = C.Id
-                FROM Cards C
-                WHERE C.Id NOT IN (
-                    SELECT UC.Id
-                    FROM UserCards UC
-                    WHERE IsActive = 1
-                ) AND IsDeleted = 0
                 
-                INSERT INTO UserCards (UserId, CardId, IsActive) VALUES(@UserId, @CardId, 1)
+                        SET @new_user_id = @userId;
+                        SET @inactive_bonus_id = (
+                        SELECT id
+                        FROM Bonus
+                        WHERE IsActive = 0
+                        LIMIT 1
+                        );
+
+
+                        INSERT INTO UserBonus (UserId, BonusId)
+                        VALUES (@new_user_id, @inactive_bonus_id);
+
+
+                        UPDATE Bonus
+                        SET IsActive = 1
+                        WHERE id = @inactive_bonus_id;
+
             ";
 
             using var connection = _context.CreateConnection();
