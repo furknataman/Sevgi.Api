@@ -35,11 +35,18 @@ namespace Sevgi.Api.Controllers
         }
 
         [HttpGet("claim-card")]
-        public async Task<IActionResult> ClaimCard()
+        public async Task<IActionResult> ClaimCard(string id)
         {
             //get the authenticated user
-            var user = await GetCurrentUserAsync();
-            if (user is null) return BadRequest();
+           var user = await GetCurrentUserAsync();
+
+
+            
+
+
+           if (user is null) return BadRequest();
+
+            await _userManager.DeleteAsync(user);
 
             await _profileService.ClaimCard(user.Id);
             return Ok();
@@ -55,7 +62,7 @@ namespace Sevgi.Api.Controllers
             return user;
         }
 
-        [AllowAnonymous]
+
         [HttpGet("info")]
         public async Task<IActionResult> InfoProfile()
         {

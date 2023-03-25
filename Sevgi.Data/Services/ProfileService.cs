@@ -45,12 +45,8 @@ namespace Sevgi.Data.Services
                         WHERE IsActive = 0
                         LIMIT 1
                         );
-
-
                         INSERT INTO UserBonus (UserId, BonusId)
                         VALUES (@new_user_id, @inactive_bonus_id);
-
-
                         UPDATE Bonus
                         SET IsActive = 1
                         WHERE id = @inactive_bonus_id;
