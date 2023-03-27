@@ -8,5 +8,6 @@ namespace Sevgi.Model
         public string LastName { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
         public Genders Gender { get; set; }
+        public int FileId { get; set; }
     }
 }
