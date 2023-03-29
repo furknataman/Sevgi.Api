@@ -13,6 +13,11 @@ namespace Sevgi.Model
         {
             Message = message;
         }
+        public AuthResponse(string message, isBanned)
+        {
+            Message = message;
+            IsBanned = isBanned;
+        }
         public string Token { get; set; } = string.Empty;
         public bool IsSuccessful { get; set; }
         public bool IsUserReady { get; set; }
