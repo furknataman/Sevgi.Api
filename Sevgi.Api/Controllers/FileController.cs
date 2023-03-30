@@ -52,5 +52,13 @@ namespace Sevgi.Api.Controllers
             var tests = await _utilService.DownloadFile(id);
             return Ok(tests);
         }
+        [AllowAnonymous]
+        [HttpGet("User-Agrement")]
+        public async Task<IActionResult> UserAgrement()
+        {
+
+            var tests = await _utilService.UserAgrement();
+            return Ok(tests);
+        }
     }
 }

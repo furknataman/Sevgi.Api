@@ -135,7 +135,7 @@ namespace Sevgi.Data.Services
 
                     //check if registration complete
                     response.IsUserReady = userFromGoogle!.IsReady;
-
+     
                     return response;
 
                 case AuthProviders.FIREBASE:
@@ -169,6 +169,7 @@ namespace Sevgi.Data.Services
 
                     //check if registration complete
                     response.IsUserReady = userFromFirebase!.IsReady;
+                   
                     
                     return response;
 

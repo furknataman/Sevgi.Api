@@ -9,6 +9,7 @@ namespace Sevgi.Data.Services
     {
         public Task<int> uploadFile(UploadableFile newFile);
         public Task<UploadableFile> DownloadFile(int id);
+        public Task<String> UserAgrement();
     }
     public class UtilService : IUtilService
     {
@@ -40,6 +41,18 @@ namespace Sevgi.Data.Services
 
             using var connection = _context.CreateConnection();
             var uploadFile = await connection.QuerySingleAsync<UploadableFile>(query, new {Id=id});
+
+            return uploadFile;
+        }
+
+        public async Task<String> UserAgrement()
+        {
+            var query = @"
+                        SELECT UserAgrement FROM UserAgrement LIMIT 1;
+                        ";
+
+            using var connection = _context.CreateConnection();
+            var uploadFile = await connection.QuerySingleAsync<String>(query);
 
             return uploadFile;
         }
