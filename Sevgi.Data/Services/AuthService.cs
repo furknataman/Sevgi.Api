@@ -76,7 +76,7 @@ namespace Sevgi.Data.Services
         {
             var userToCheck = await _userManager.FindByEmailAsync(email);
             if (userToCheck is null) return new("User not found.");
-            if (!userToCheck.IsActive) return new("User is not allowed.", userToCheck.IsActive);
+            if (!userToCheck.IsActive) return new("User is not allowed.", !userToCheck.IsActive);
             if (!await _userManager.CheckPasswordAsync(userToCheck, password)) return new("One or more of the credentials are not valid.");
 
             var authClaims = new List<Claim>
