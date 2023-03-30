@@ -168,7 +168,7 @@ namespace Sevgi.Data.Services
                     await _userManager.AddLoginAsync(userFromFirebase!, firebaseLoginInfo);
 
                     //check if registration complete
-                    response.IsUserReady = userFromFirebase!.IsActive;
+                    response.IsUserReady = userFromFirebase!.IsReady;
                     
                     return response;
 
