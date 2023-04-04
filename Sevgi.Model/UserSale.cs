@@ -20,9 +20,9 @@ namespace Sevgi.Model
         public double CardTotal { get; set; }
         public int FileId { get; set; }
         public string Name { get; set; } = string.Empty;
+        public double Bonus { get; set; }
 
 
 
-
-    }
+}
 }
