@@ -14,10 +14,13 @@ namespace Sevgi.Api.Controllers
         //This controller uses base service injection which also uses dapper context to connect to database.
 
         private readonly IAdminService _adminService;
+        private readonly ICardService _cardService;
 
-        public AdminControlller(IAdminService adminService)
+        public AdminControlller(IAdminService adminService, ICardService cardService)
         {
             _adminService = adminService;
+            _cardService = cardService;
+            
         }
         [AllowAnonymous]
         [HttpGet("get-users")]
@@ -40,6 +43,13 @@ namespace Sevgi.Api.Controllers
             var response = await _adminService.UpdateUser(request.Id,request.Name ,request.Surname,request.phoneNumber,request.Status);
             if (response.Succeeded) return Ok(response);
             else return BadRequest(response);
+        }
+        [AllowAnonymous]
+        [HttpGet("card-control")]
+        public async Task<int> CardControl()
+        {
+            var tests = await _cardService.CardControl();
+            return tests;
         }
     }
 }

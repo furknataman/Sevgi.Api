@@ -39,20 +39,19 @@ namespace Sevgi.Data.Services
         {
             var query = @"
                 
-                        SET @new_user_id = @userId;
-                        SET @inactive_bonus_id = (
-                        SELECT id
-                        FROM Bonus
-                        WHERE IsActive = 0
-                        LIMIT 1
-                        );
-                        INSERT INTO UserBonus (UserId, BonusId)
-                        VALUES (@new_user_id, @inactive_bonus_id);
-                        UPDATE Bonus
-                        SET IsActive = 1
-                        WHERE id = @inactive_bonus_id;
-
-            ";
+                       SET @new_user_id = @userId;
+                       SET @inactive_bonus_id = (
+                       SELECT id
+                       FROM Bonus
+                       WHERE IsActive = 0 AND IsPhysically = 0
+                       LIMIT 1
+                       );
+                       INSERT INTO UserBonus (UserId, BonusId)
+                       VALUES (@new_user_id, @inactive_bonus_id);
+                       UPDATE Bonus
+                       SET IsActive = 1
+                       WHERE id = @inactive_bonus_id;
+    ";
 
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { UserId = userId });

@@ -53,7 +53,6 @@ namespace Sevgi.Data.Services
             return allUsers;
 
 
-
         }
 
 
