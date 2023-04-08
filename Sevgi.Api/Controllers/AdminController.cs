@@ -46,9 +46,9 @@ namespace Sevgi.Api.Controllers
         }
         [AllowAnonymous]
         [HttpGet("card-control")]
-        public async Task<int> CardControl()
+        public async Task<int> CardControl(String cardNo)
         {
-            var tests = await _cardService.CardControl();
+            var tests = await _cardService.CardControl(cardNo);
             return tests;
         }
     }

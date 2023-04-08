@@ -11,7 +11,7 @@ namespace Sevgi.Data.Services
     public interface ICardService
     {
 
-        public Task<int> CardControl();
+        public Task<int> CardControl(String cardNo);
 
     }
     public class CardService : ICardService
@@ -27,7 +27,7 @@ namespace Sevgi.Data.Services
             _context = dapperContext;
             _userManager = userManager;
         }
-        public async Task<int> CardControl()
+        public async Task<int> CardControl(String cardNo)
         {
 
             var query = @"
@@ -35,11 +35,11 @@ namespace Sevgi.Data.Services
                        IF(IsActive = 0 AND IsPhysically = 1, 1, 2),
                        0) AS Result
                        FROM Bonus
-                       WHERE CardNo = '1234567890';
+                       WHERE CardNo = @cardNo;
                        ";
 
             using var connection = _context.CreateConnection();
-            var cardControl = await connection.QuerySingleAsync<int>(query);
+            var cardControl = await connection.QuerySingleAsync<int>(query, new { cardNo = cardNo});
             return cardControl;
 
 
