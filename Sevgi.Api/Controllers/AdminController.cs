@@ -53,9 +53,9 @@ namespace Sevgi.Api.Controllers
         }
 
         [HttpPost("create-user")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest newUser)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest newUser, string cardNumber)
         {
-            await _adminService.CreateUser(newUser);
+            await _adminService.CreateUser(newUser, cardNumber);
             return Ok();
         }
     }

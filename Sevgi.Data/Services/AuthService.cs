@@ -112,6 +112,7 @@ namespace Sevgi.Data.Services
         public async Task<AuthResponse> ExternalAuth(AuthRequest request)
         {
             var response = new AuthResponse();
+            bool isInternal = false;
             switch (request.Provider)
             {
                 case AuthProviders.GOOGLE:
@@ -168,7 +169,14 @@ namespace Sevgi.Data.Services
                         if (checkedUser is not null)
                         {
                             //run internal login
-                            response = await SignIn(userToRegister.Email, checkedUser.PhoneNumber!.GeneratePassword());
+                            response = await SignIn(checkedUser.Email!, checkedUser.PhoneNumber!.GeneratePassword());
+
+
+                            //return before firebase process
+                            var internalLoginInfo = new UserLoginInfo("INTERNAL", checkedUser.PhoneNumber!, "Internal");
+                            await _userManager.AddLoginAsync(checkedUser!, internalLoginInfo);
+                            response.IsUserReady = checkedUser.IsReady;
+                            return response;
                         }
                         else
                         {

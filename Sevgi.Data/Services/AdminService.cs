@@ -17,7 +17,7 @@ namespace Sevgi.Data.Services
         public Task<IEnumerable<UserView>> GetAll();
         public Task<IEnumerable<Sale>> GetAllSell();
         public Task<IdentityResult> UpdateUser(UpdateUserRequest updateRequest);
-        public Task CreateUser(CreateUserRequest newUser);
+        public Task CreateUser(CreateUserRequest newUser, string cardNumber);
     }
     public class AdminService : IAdminService
     {
@@ -77,10 +77,10 @@ namespace Sevgi.Data.Services
             var result = await _userManager.UpdateAsync(userToCheck);
             return result;
         }
-        public async Task CreateUser(CreateUserRequest newUser)
+        public async Task CreateUser(CreateUserRequest newUser, string cardNumber)
         {
             var checkUserQuery = @"
-                SELECT * FROM
+                SELECT TOP 1 FROM
                 Users U
                 WHERE U.PhoneNumber = '@PhoneNumber'
             ";
@@ -99,9 +99,13 @@ namespace Sevgi.Data.Services
                 LastName = newUser.LastName,
                 Gender = newUser.Gender,
                 FileId = newUser.FileId,
+                IsReady = true,
+                IsActive = true
             };
-
             await _userManager.CreateAsync(userToCreate, userToCreate.PhoneNumber.GeneratePassword());
+
+            //var createdUser = await _userManager.FindByEmailAsync(userToCreate.Email);
+            //add card to user here
         }
     }
 }
