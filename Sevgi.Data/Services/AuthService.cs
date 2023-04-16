@@ -1,19 +1,16 @@
-﻿using FirebaseAdmin;
+﻿using Dapper;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Sevgi.Data.Database;
 using Sevgi.Data.Utilities;
 using Sevgi.Model;
 using Sevgi.Model.Utilities;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Sevgi.Data.Services
 {
@@ -31,8 +28,10 @@ namespace Sevgi.Data.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly DapperContext _dapperContext;
 
-        public AuthService(UserManager<User> userManager, IConfiguration configuration)
+
+        public AuthService(UserManager<User> userManager, IConfiguration configuration, DapperContext context)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -139,7 +138,6 @@ namespace Sevgi.Data.Services
                     return response;
 
                 case AuthProviders.FIREBASE:
-
                     //verify firebase token
                     var firebaseToken = await FirebaseAuth.DefaultInstance!.VerifyIdTokenAsync(request.IdToken);
                     if (firebaseToken is null) return new("Invalid Token.");
@@ -158,9 +156,31 @@ namespace Sevgi.Data.Services
                         SecurityStamp = Guid.NewGuid().ToString()
                     };
 
+                    #region REMOVE_WHEN_POSSIBLE
                     //register if not
-                    if (userFromFirebase is null) response = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
-                    else response = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
+                    if (userFromFirebase is null)
+                    {
+                        //check for internal user first
+                        var checkUserQuery = "SELECT * FROM Users U WHERE U.PhoneNumber = '@PhoneNumber'";
+                        using var connection = _dapperContext.CreateConnection();
+                        var checkedUser = await connection.QueryFirstOrDefaultAsync<User>(checkUserQuery, firebaseUser.PhoneNumber);
+                        //if exists login
+                        if (checkedUser is not null)
+                        {
+                            //run internal login
+                            response = await SignIn(userToRegister.Email, checkedUser.PhoneNumber!.GeneratePassword());
+                        }
+                        else
+                        {
+                            //if not, continue with firebase signup process
+                            response = await SignUp(userToRegister, firebaseUser.Uid.GeneratePassword());
+                        }
+                    }
+                    else
+                    {
+                        response = await SignIn(userToRegister.Email, firebaseUser.Uid.GeneratePassword());
+                    } 
+                    #endregion
 
                     userFromFirebase = userFromFirebase is null ? await _userManager.FindByEmailAsync(userToRegister.Email) : userFromFirebase;
 
@@ -169,7 +189,6 @@ namespace Sevgi.Data.Services
 
                     //check if registration complete
                     response.IsUserReady = userFromFirebase!.IsReady;
-                   
                     
                     return response;
 

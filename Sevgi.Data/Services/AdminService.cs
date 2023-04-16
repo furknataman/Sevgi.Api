@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Data;
 using Dapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Sevgi.Data.Database;
+using Sevgi.Data.Utilities;
 using Sevgi.Model;
 using Sevgi.Model.Utilities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Sevgi.Data.Services
 {
@@ -13,7 +16,8 @@ namespace Sevgi.Data.Services
 
         public Task<IEnumerable<UserView>> GetAll();
         public Task<IEnumerable<Sale>> GetAllSell();
-        public Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone, bool status);
+        public Task<IdentityResult> UpdateUser(UpdateUserRequest updateRequest);
+        public Task CreateUser(CreateUserRequest newUser);
     }
     public class AdminService : IAdminService
     {
@@ -51,11 +55,7 @@ namespace Sevgi.Data.Services
             using var connection = _context.CreateConnection();
             var allUsers = await connection.QueryAsync<UserView>(query);
             return allUsers;
-
-
         }
-
-
         public async Task<IEnumerable<Sale>> GetAllSell()
         {
 
@@ -65,22 +65,43 @@ namespace Sevgi.Data.Services
             var allSale = await connection.QueryAsync<Sale>(query);
             return allSale;
         }
-
-
-
-
-        public async Task<IdentityResult> UpdateUser(string id, string firstName, string LastName, string phone, bool status)
+        public async Task<IdentityResult> UpdateUser(UpdateUserRequest updateRequest)
         {
-            var userToCheck = await _userManager.FindByIdAsync(id) ?? throw new UserException("User not found ");
+            var userToCheck = await _userManager.FindByIdAsync(updateRequest.Id) ?? throw new UserException("User not found ");
             
-            userToCheck.FirstName = firstName;
-            userToCheck.LastName = LastName;
-            userToCheck.PhoneNumber = phone;
-            userToCheck.IsActive = status;
+            userToCheck.FirstName = updateRequest.FirstName;
+            userToCheck.LastName = updateRequest.LastName;
+            userToCheck.PhoneNumber = updateRequest.PhoneNumber;
+            userToCheck.IsActive = updateRequest.Status;
 
             var result = await _userManager.UpdateAsync(userToCheck);
             return result;
+        }
+        public async Task CreateUser(CreateUserRequest newUser)
+        {
+            var checkUserQuery = @"
+                SELECT * FROM
+                Users U
+                WHERE U.PhoneNumber = '@PhoneNumber'
+            ";
 
+            using var connection = _context.CreateConnection();
+            var checkedUser = await connection.QueryFirstOrDefaultAsync<User>(checkUserQuery, new { newUser.PhoneNumber });
+
+            if (checkedUser is not null) throw new UserExistsException();
+
+            var userToCreate = new User()
+            {
+                BirthDate = newUser.BirthDate,
+                PhoneNumber = newUser.PhoneNumber,
+                Email = newUser.PhoneNumber.GenerateEmailForInternal(),
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                Gender = newUser.Gender,
+                FileId = newUser.FileId,
+            };
+
+            await _userManager.CreateAsync(userToCreate, userToCreate.PhoneNumber.GeneratePassword());
         }
     }
 }

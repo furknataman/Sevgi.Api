@@ -22,7 +22,10 @@ namespace Sevgi.Data.Utilities
         {
             return "fuser_" + seed + "_" + second + "_" + (seed + second).Length;
         }
-
+        public static string GenerateEmailForInternal(this string phoneNumber)
+        {
+            return "intuser_" + phoneNumber.ToLower() + phoneNumber.Length + "@internal.com";
+        }
 
 
 
