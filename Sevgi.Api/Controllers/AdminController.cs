@@ -5,6 +5,7 @@ using Sevgi.Model;
 
 namespace Sevgi.Api.Controllers
 {
+    //[Authorize(Roles = "ADMINISTRATOR")]
     [ApiController]
     [Authorize]
     [Route("admin")]
@@ -23,6 +24,7 @@ namespace Sevgi.Api.Controllers
 
         }
 
+        //[Authorize(Roles = "ADMINISTRATOR")]
         [HttpGet("get-users")]
         public async Task<IEnumerable<UserView>> GetUsers()
         {
@@ -30,8 +32,10 @@ namespace Sevgi.Api.Controllers
             return tests;
         }
 
+        //[Authorize(Roles = "CASHIER")]
+        //[Authorize(Roles = "ADMINISTRATOR")]
         [HttpGet("get-sales")]
-        public async Task<IEnumerable<Sale>> getSales()
+        public async Task<IEnumerable<Sale>> GetSales()
         {
             var tests = await _adminService.GetAllSell();
             return tests;
