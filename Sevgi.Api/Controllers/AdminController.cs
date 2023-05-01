@@ -22,21 +22,21 @@ namespace Sevgi.Api.Controllers
             _cardService = cardService;
 
         }
-
+        [AllowAnonymous]
         [HttpGet("get-users")]
         public async Task<IEnumerable<UserView>> GetUsers()
         {
             var tests = await _adminService.GetAll();
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpGet("get-sales")]
         public async Task<IEnumerable<Sale>> getSales()
         {
             var tests = await _adminService.GetAllSell();
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
         {
@@ -44,14 +44,14 @@ namespace Sevgi.Api.Controllers
             if (response.Succeeded) return Ok(response);
             else return BadRequest(response);
         }
-
+        [AllowAnonymous]
         [HttpGet("card-control")]
         public async Task<int> CardControl(string cardNo)
         {
             var tests = await _cardService.CardControl(cardNo);
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest newUser, string cardNumber)
         {
