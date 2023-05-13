@@ -40,7 +40,7 @@ namespace Sevgi.Api.Controllers
             var tests = await _adminService.GetAllSell();
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
         {
@@ -48,14 +48,14 @@ namespace Sevgi.Api.Controllers
             if (response.Succeeded) return Ok(response);
             else return BadRequest(response);
         }
-
+        [AllowAnonymous]
         [HttpGet("card-control")]
         public async Task<int> CardControl(string cardNo)
         {
             var tests = await _cardService.CardControl(cardNo);
             return tests;
         }
-
+        [AllowAnonymous]
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest newUser, string cardNumber)
         {
