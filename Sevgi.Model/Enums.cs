@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,5 +26,15 @@ namespace Sevgi.Model
     public enum Genders { 
         MALE,
         FEMALE
+    }
+    public enum Roles {
+        [Description("CUSTOMER")]
+        CUSTOMER = 0,
+        [Description("OPERATOR")]
+        OPERATOR = 1,
+        [Description("CASHIER")]
+        CASHIER = 2,
+        [Description("ADMINISTRATOR")]
+        ADMINISTRATOR = 3
     }
 }

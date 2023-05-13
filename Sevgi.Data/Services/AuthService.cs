@@ -17,7 +17,10 @@ namespace Sevgi.Data.Services
     public interface IAuthService
     {
         Task<AuthResponse> SignUp(string email, string password);
+        Task<AuthResponse> AdminSignIn(string email, string password);
+        Task<AuthResponse> CashierSignIn(string email, string password);
         Task<AuthResponse> SignIn(string email, string password);
+        Task<AuthResponse> SignIn(User userToSignIn, string password);
         Task<AuthResponse> ExternalAuth(AuthRequest request);
         Task<string> SignOut(string email);
         Task ClearUsers();
@@ -67,6 +70,10 @@ namespace Sevgi.Data.Services
 
             if (!result.Succeeded) return new("Signup is not successful.");
 
+            var roleResult = await _userManager.AddToRoleAsync(user, Roles.CUSTOMER.ToString());
+
+            if (!roleResult.Succeeded) return new("Role cannot be added.");
+
             var signinResponse = await SignIn(user.Email!, password);
 
             return signinResponse;
@@ -76,6 +83,7 @@ namespace Sevgi.Data.Services
             var userToCheck = await _userManager.FindByEmailAsync(email);
             if (userToCheck is null) return new("User not found.");
             if (!userToCheck.IsActive) return new("User is not allowed.", !userToCheck.IsActive);
+
             if (!await _userManager.CheckPasswordAsync(userToCheck, password)) return new("One or more of the credentials are not valid.");
 
             var authClaims = new List<Claim>
@@ -91,6 +99,48 @@ namespace Sevgi.Data.Services
                 IsSuccessful = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token)
             };
+        }
+        public async Task<AuthResponse> SignIn(User userToSignIn, string password)
+        {
+            if (!userToSignIn.IsActive) return new("User is not allowed.", !userToSignIn.IsActive);
+
+            if (!await _userManager.CheckPasswordAsync(userToSignIn, password)) return new("One or more of the credentials are not valid.");
+
+            var authClaims = new List<Claim>
+            {
+                new(ClaimTypes.Email, userToSignIn.Email!),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = GetToken(authClaims);
+
+            return new()
+            {
+                IsSuccessful = true,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
+        }
+        public async Task<AuthResponse> AdminSignIn(string email, string password)
+        {
+            var userToCheck = await _userManager.FindByEmailAsync(email);
+
+            if (userToCheck is null) return new("User not found.");
+            if (!await _userManager.IsInRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString())) return new("User is not authorized.");
+
+            //await _userManager.AddToRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString());
+            
+            return await SignIn(userToCheck, password);
+        }
+        public async Task<AuthResponse> CashierSignIn(string email, string password)
+        {
+            var userToCheck = await _userManager.FindByEmailAsync(email);
+
+            if (userToCheck is null) return new("User not found.");
+            if (!await _userManager.IsInRoleAsync(userToCheck, Roles.CASHIER.ToString())) return new("User is not authorized.");
+
+            //await _userManager.AddToRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString());
+
+            return await SignIn(userToCheck, password);
         }
         private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
         {
@@ -115,29 +165,6 @@ namespace Sevgi.Data.Services
             bool isInternal = false;
             switch (request.Provider)
             {
-                case AuthProviders.GOOGLE:
-                    //verify google
-                    var payload = await VerifyGoogleToken(request.IdToken);
-                    if (payload == null) return new("Invalid Token.");
-
-                    //check if registered
-                    var googleLoginInfo = new UserLoginInfo(request.Provider.ToString(), payload.Subject, "Google");
-                    var userFromGoogle = await _userManager.FindByEmailAsync(payload.Email);
-
-                    //register if not
-                    if (userFromGoogle is null) response = await SignUp(payload.Email, payload.Email.GeneratePassword());
-                    else response = await SignIn(payload.Email, payload.Email.GeneratePassword());
-
-                    userFromGoogle = userFromGoogle is null ? await _userManager.FindByEmailAsync(payload.Email) : userFromGoogle;
-
-                    //add login
-                    await _userManager.AddLoginAsync(userFromGoogle!, googleLoginInfo);
-
-                    //check if registration complete
-                    response.IsUserReady = userFromGoogle!.IsReady;
-     
-                    return response;
-
                 case AuthProviders.FIREBASE:
                     //verify firebase token
                     var firebaseToken = await FirebaseAuth.DefaultInstance!.VerifyIdTokenAsync(request.IdToken);
@@ -206,22 +233,18 @@ namespace Sevgi.Data.Services
                     return new("This provider is not supported.");
             }
         }
-
         public Task<string> SignOut(string email)
         {
             throw new NotImplementedException();
         }
-
         public Task ClearUsers()
         {
             throw new NotImplementedException();
         }
-
         public Task AddUserInfo(ProfileInformation request)
         {
             throw new NotImplementedException();
         }
-
         private async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(string idToken)
         {
             var settings = new GoogleJsonWebSignature.ValidationSettings() { Audience = new List<string>() { _configuration["Authentication:Google:ClientId"] } };
