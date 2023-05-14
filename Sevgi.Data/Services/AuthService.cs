@@ -30,14 +30,16 @@ namespace Sevgi.Data.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly DapperContext _dapperContext;
 
 
-        public AuthService(UserManager<User> userManager, IConfiguration configuration, DapperContext context)
+        public AuthService(UserManager<User> userManager, IConfiguration configuration, DapperContext context, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
 
         public async Task<AuthResponse> SignUp(string email, string password)
@@ -125,10 +127,17 @@ namespace Sevgi.Data.Services
             var userToCheck = await _userManager.FindByEmailAsync(email);
 
             if (userToCheck is null) return new("User not found.");
+
+            //check admin role
+            var adminRoleExists = await _roleManager.RoleExistsAsync(Roles.ADMINISTRATOR.ToString());
+            //add if not exists>
+            if (!adminRoleExists) await _roleManager.CreateAsync(new() { Name = Roles.ADMINISTRATOR.ToString() });
+            //check and add user admin role. DEVELOPMENT ONLY!!!
+            if (!await _userManager.IsInRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString()))
+                await _userManager.AddToRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString());
+
             if (!await _userManager.IsInRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString())) return new("User is not authorized.");
 
-            //await _userManager.AddToRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString());
-            
             return await SignIn(userToCheck, password);
         }
         public async Task<AuthResponse> CashierSignIn(string email, string password)
@@ -136,6 +145,15 @@ namespace Sevgi.Data.Services
             var userToCheck = await _userManager.FindByEmailAsync(email);
 
             if (userToCheck is null) return new("User not found.");
+
+            //check cashier role
+            var adminRoleExists = await _roleManager.RoleExistsAsync(Roles.CASHIER.ToString());
+            //add if not exists>
+            if (!adminRoleExists) await _roleManager.CreateAsync(new() { Name = Roles.CASHIER.ToString() });
+            //check and add user admin role. DEVELOPMENT ONLY!!!
+            if (!await _userManager.IsInRoleAsync(userToCheck, Roles.CASHIER.ToString()))
+                await _userManager.AddToRoleAsync(userToCheck, Roles.CASHIER.ToString());
+
             if (!await _userManager.IsInRoleAsync(userToCheck, Roles.CASHIER.ToString())) return new("User is not authorized.");
 
             //await _userManager.AddToRoleAsync(userToCheck, Roles.ADMINISTRATOR.ToString());
